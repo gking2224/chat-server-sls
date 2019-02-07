@@ -1,0 +1,71 @@
+service: hello-sls
+
+plugins:
+  - serverless-pseudo-parameters
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+  stage: dev
+  region: eu-west-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action: dynamodb:Scan
+      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/messages.v2
+    - Effect: Allow
+      Action: dynamodb:PutItem
+      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/messages.v2
+    - Effect: Allow
+      Action: comprehend:DetectDominantLanguage
+      Resource: "*"
+    - Effect: Allow
+      Action: translate:TranslateText
+      Resource: "*"
+  environment:
+    messages_table: messages.v2
+  tags:
+    Client: Animando
+    Application: HelloSls
+
+functions:
+  hello:
+    handler: functions/hello.handler
+    events:
+      - http:
+          path: /
+          method: GET
+  get-messages:
+    handler: functions/get-messages.handler
+    events:
+      - http:
+          path: /get-messages
+          method: GET
+          cors: true
+  post-message:
+    handler: functions/post-message.handler
+    events:
+      - http:
+          path: /post-message
+          method: POST
+          cors: true
+  websocket:
+    handler: functions/websocket.handler
+
+resources:
+  Resources:
+    messagesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: messages.v2
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: messageId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: messageId
+            KeyType: HASH
+package:
+  exclude:
+    - node_modules/**
+    - '!node_modules/uuid/**'

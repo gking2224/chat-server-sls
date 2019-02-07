@@ -1,0 +1,14 @@
+{
+  "name": "chat-server-sls",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "deploy": "sls deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "uuid": "^3.3.2"
+  }
+}
