@@ -17,13 +17,23 @@ provider:
       Action: dynamodb:PutItem
       Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/messages.v2
     - Effect: Allow
+      Action: dynamodb:Scan
+      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/connections
+    - Effect: Allow
+      Action: dynamodb:PutItem
+      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/connections
+    - Effect: Allow
       Action: comprehend:DetectDominantLanguage
       Resource: "*"
     - Effect: Allow
       Action: translate:TranslateText
       Resource: "*"
+    - Effect: Allow
+      Action: execute-api:ManageConnections
+      Resource: arn:aws:execute-api:#{AWS::Region}:#{AWS::AccountId}:${file(./.env.yml):wsApiGatewayId}/dev/POST/@connections/*
   environment:
     messages_table: messages.v2
+    connections_table: connections
   tags:
     Client: Animando
     Application: HelloSls
@@ -65,7 +75,29 @@ resources:
         KeySchema:
           - AttributeName: messageId
             KeyType: HASH
+
+    connectionsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: connections
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: connectionId
+            AttributeType: S
+          - AttributeName: room
+            AttributeType: S
+        KeySchema:
+          - AttributeName: connectionId
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: 'roomIdx'
+            KeySchema:
+              - AttributeName: 'room'
+                KeyType: 'HASH'
+            Projection:
+              ProjectionType: ALL
 package:
   exclude:
     - node_modules/**
+    - '!node_modules/aws-sdk/**'
     - '!node_modules/uuid/**'

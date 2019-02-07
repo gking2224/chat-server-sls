@@ -1,10 +1,4 @@
-const AWS = require('aws-sdk');
-const dynamodb = new AWS.DynamoDB.DocumentClient();
-const generateRandomId = require('../lib/generate-random-id');
-const getLanguage = require('../lib/get-language');
-const translateToEnglish = require('../lib/translate-to-english');
-
-const TableName = process.env.messages_table;
+const saveMessage = require('../lib/save-message');
 
 const validatePayload = (body) => {
   if (!body) throw new Error('payload is missing');
@@ -15,30 +9,13 @@ const validatePayload = (body) => {
   return parsed;
 };
 
-module.exports.handler = async (event, context) => {
+module.exports.handler = async (event) => {
   try {
-
     const { message } = validatePayload(event.body);
-
-    const language = await getLanguage(message);
-
-    const Item = {
-      messageId: generateRandomId(),
-      message,
-      language
-    }
-
-    if (language !== 'en') {
-      Item.translation = await translateToEnglish(message, language);
-    }
-    const req = {
-      TableName,
-      Item
-    };
-    const resp = await dynamodb.put(req).promise();
+    const resp = await saveMessage({ message });
     return {
       statusCode: 200,
-      body: JSON.stringify(Item),
+      body: JSON.stringify(resp),
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
@@ -49,12 +26,12 @@ module.exports.handler = async (event, context) => {
       statusCode: 500,
       body: JSON.stringify({
         message: e.message,
-        error: e
-      })
+        error: e,
+      }),
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
       },
-    }
+    };
   }
-}
+};
