@@ -67,6 +67,13 @@ functions:
           path: /get-rooms
           method: GET
           cors: true
+  create-room:
+    handler: functions/create-room.handler
+    events:
+      - http:
+          path: /create-room
+          method: POST
+          cors: true
 
 resources:
   Resources:
