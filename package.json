@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/uuid": "^3.4.4",
     "aws-sdk": "^2.398.0",
     "uuid": "^3.3.2"
   },

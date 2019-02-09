@@ -1,14 +1,18 @@
-import AWS = require('aws-sdk');
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import EnvVariables from './env-variables';
+import { DynamoDB } from 'aws-sdk';
 
-const dynamodb = new AWS.DynamoDB.DocumentClient();
+const dynamodb = new DynamoDB.DocumentClient();
 
-export default async (room) => { // eslint-disable-line no-unused-vars
-  const req: DocumentClient.ScanInput = {
+export default async (room: string) => { // eslint-disable-line no-unused-vars
+  const req: DocumentClient.QueryInput = {
     TableName: EnvVariables.MessagesTable,
-    Limit: 10,
+    IndexName: 'roomIdx',
+    KeyConditionExpression: "room = :room",
+    ExpressionAttributeValues: {
+      ":room": room
+    },
   };
-  const resp = await dynamodb.scan(req).promise();
+  const resp = await dynamodb.query(req).promise();
   return resp.Items;
 };

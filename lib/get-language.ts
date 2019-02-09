@@ -1,7 +1,7 @@
-import AWS = require('aws-sdk');
 import { DetectDominantLanguageResponse, DominantLanguage, Float } from 'aws-sdk/clients/comprehend';
+import { Comprehend } from 'aws-sdk';
 
-const comprehend = new AWS.Comprehend();
+const comprehend = new Comprehend();
 
 type Language = {
   Score: Float;

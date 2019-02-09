@@ -21,6 +21,12 @@ provider:
       Action: dynamodb:PutItem
       Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/messages.v2
     - Effect: Allow
+      Action: dynamodb:Query
+      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/messages.v2/index/roomIdx
+    - Effect: Allow
+      Action: dynamodb:DeleteItem
+      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/connections
+    - Effect: Allow
       Action: dynamodb:Scan
       Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/connections
     - Effect: Allow
@@ -43,32 +49,6 @@ provider:
     Application: HelloSls
 
 functions:
-  # hello:
-  #   handler: functions/hello.handler
-  #   layers:
-  #     - ${file(./.env.yml):nodejsLayerArn}
-  #   events:
-  #     - http:
-  #         path: /
-  #         method: GET
-  # get-messages:
-  #   handler: functions/get-messages.handler
-  #   layers:
-  #     - ${file(./.env.yml):nodejsLayerArn}
-  #   events:
-  #     - http:
-  #         path: /get-messages
-  #         method: GET
-  #         cors: true
-  # post-message:
-  #   handler: functions/post-message.handler
-  #   layers:
-  #     - ${file(./.env.yml):nodejsLayerArn}
-  #   events:
-  #     - http:
-  #         path: /post-message
-  #         method: POST
-  #         cors: true
   websocket:
     handler: functions/websocket.handler
     layers:
@@ -84,9 +64,18 @@ resources:
         AttributeDefinitions:
           - AttributeName: messageId
             AttributeType: S
+          - AttributeName: room
+            AttributeType: S
         KeySchema:
           - AttributeName: messageId
             KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: 'roomIdx'
+            KeySchema:
+              - AttributeName: 'room'
+                KeyType: 'HASH'
+            Projection:
+              ProjectionType: ALL
 
     connectionsTable:
       Type: AWS::DynamoDB::Table

@@ -1,52 +1,22 @@
-import AWS = require('aws-sdk');
-
 import saveConnection from '../lib/save-connection';
-import saveMessage from '../lib/save-message';
-import getMessages from '../lib/get-messages';
+import deleteConnection from '../lib/delete-connection';
+import { ApiGatewayManagementApi } from 'aws-sdk';
+import { processMessage } from '../lib/process-message';
 
-const sendMessageToRoom = async (agma, connectionId, message) =>
-  agma.postToConnection({
-    ConnectionId: connectionId,
-    Data: JSON.stringify({ action: 'message', message }),
-  }).promise();
+export type Agma = ApiGatewayManagementApi;
 
-const sendError = async (agma, connectionId, error) =>
+const sendError = async (agma: Agma, connectionId: string, error: any) =>
   agma.postToConnection({
     ConnectionId: connectionId,
     Data: JSON.stringify({ error }),
   }).promise();
 
-const sendMessages = async (agma, connectionId, messages) => {
-  const sent = await agma.postToConnection({
-    ConnectionId: connectionId,
-    Data: JSON.stringify({ action: 'init', messages }),
-  }).promise();
-  return sent;
-};
+const initConnection = async (connectionId: string, room: string, author: string) =>
+  saveConnection(connectionId, room, author);
 
-const initConnection = async (agma, connectionId, room, author) => saveConnection(connectionId, room, author);
+const onDisconnect = async (connectionId: string, ) =>
+  deleteConnection(connectionId);
 
-const sendAllMessages = async (agma, connectionId, room) => {
-  const messages = await getMessages(room);
-  await sendMessages(agma, connectionId, messages);
-};
-
-const doSaveMessage = async (agma, connectionId, message) => {
-  const saved = await saveMessage(message);
-  await sendMessageToRoom(agma, connectionId, saved);
-};
-
-const processMessage = async (agma, connectionId, body) => {
-  switch (body.action) {
-    case 'init':
-      await sendAllMessages(agma, connectionId, body.room);
-      break;
-    case 'message':
-      await doSaveMessage(agma, connectionId, body.message);
-      break;
-    default:
-  }
-};
 export const handler = async (event: any) => {
   const {
     eventType,
@@ -57,13 +27,16 @@ export const handler = async (event: any) => {
   const { queryStringParameters } = event;
   const { room, author } = (queryStringParameters || {}) as any;
 
-  const agma = new AWS.ApiGatewayManagementApi({
+  const agma = new ApiGatewayManagementApi({
     endpoint: `${domainName}/${stage}`,
   });
   try {
     switch (eventType) {
       case 'CONNECT':
-        await initConnection(agma, connectionId, room, author);
+        await initConnection(connectionId, room, author);
+        break;
+      case 'DISCONNECT':
+        await onDisconnect(connectionId);
         break;
       case 'MESSAGE':
         await processMessage(agma, connectionId, JSON.parse(event.body));
@@ -72,6 +45,7 @@ export const handler = async (event: any) => {
         console.error(`Unknown eventType: ${eventType}`);
     }
   } catch (e) {
+    console.error(e);
     sendError(agma, connectionId, e);
   }
 
