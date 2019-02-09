@@ -41,12 +41,16 @@ provider:
 functions:
   hello:
     handler: functions/hello.handler
+    layers:
+      - ${file(./.env.yml):nodejsLayerArn}
     events:
       - http:
           path: /
           method: GET
   get-messages:
     handler: functions/get-messages.handler
+    layers:
+      - ${file(./.env.yml):nodejsLayerArn}
     events:
       - http:
           path: /get-messages
@@ -54,6 +58,8 @@ functions:
           cors: true
   post-message:
     handler: functions/post-message.handler
+    layers:
+      - ${file(./.env.yml):nodejsLayerArn}
     events:
       - http:
           path: /post-message
@@ -61,6 +67,8 @@ functions:
           cors: true
   websocket:
     handler: functions/websocket.handler
+    layers:
+      - ${file(./.env.yml):nodejsLayerArn}
 
 resources:
   Resources:
@@ -99,5 +107,4 @@ resources:
 package:
   exclude:
     - node_modules/**
-    - '!node_modules/aws-sdk/**'
     - '!node_modules/uuid/**'

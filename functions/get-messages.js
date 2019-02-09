@@ -1,20 +1,12 @@
-const AWS = require('aws-sdk');
-
-const dynamodb = new AWS.DynamoDB.DocumentClient();
-
-const TableName = process.env.messages_table;
+const getMessages = require('../lib/get-messages');
 
 module.exports.handler = async (event, context) => { // eslint-disable-line no-unused-vars
-  const req = {
-    TableName,
-    Limit: 10,
-  };
   try {
-    const resp = await dynamodb.scan(req).promise();
+    const messages = await getMessages();
     return {
       statusCode: 200,
       body: JSON.stringify({
-        messages: resp.Items,
+        messages,
       }),
       headers: {
         'Access-Control-Allow-Origin': '*',
