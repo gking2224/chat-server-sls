@@ -1,10 +1,9 @@
 import EnvVariables from './env-variables';
+import { DynamoDB } from 'aws-sdk';
 
-const AWS = require('aws-sdk');
+const dynamodb = new DynamoDB.DocumentClient();
 
-const dynamodb = new AWS.DynamoDB.DocumentClient();
-
-export default async (connectionId, room, author) => {
+export default async (connectionId: string, room: string, author: string) => {
   const Item = {
     connectionId,
     room,

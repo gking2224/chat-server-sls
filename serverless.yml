@@ -53,6 +53,13 @@ functions:
     handler: functions/websocket.handler
     layers:
       - ${file(./.env.yml):nodejsLayerArn}
+  get-rooms:
+    handler: functions/get-rooms.handler
+    events:
+      - http:
+          path: /get-rooms
+          method: GET
+          cors: true
 
 resources:
   Resources:

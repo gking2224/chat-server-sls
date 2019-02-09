@@ -11,8 +11,10 @@ const sendError = async (agma: Agma, connectionId: string, error: any) =>
     Data: JSON.stringify({ error }),
   }).promise();
 
-const initConnection = async (connectionId: string, room: string, author: string) =>
-  saveConnection(connectionId, room, author);
+const initConnection = async (connectionId: string, room: string, author: string) => {
+  console.log('initConnection', room, author);
+  return saveConnection(connectionId, room, author);
+}
 
 const onDisconnect = async (connectionId: string, ) =>
   deleteConnection(connectionId);

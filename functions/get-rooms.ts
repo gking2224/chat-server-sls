@@ -1,12 +1,12 @@
-const getMessagesFn = require('../lib/get-messages');
+import getRooms from '../lib/get-rooms';
 
-module.exports.handler = async (event, context) => { // eslint-disable-line no-unused-vars
+module.exports.handler = async (event: any, context: any) => { // eslint-disable-line no-unused-vars
   try {
-    const messages = await getMessagesFn();
+    const rooms = await getRooms();
     return {
       statusCode: 200,
       body: JSON.stringify({
-        messages,
+        rooms
       }),
       headers: {
         'Access-Control-Allow-Origin': '*',
