@@ -16,6 +16,12 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action: dynamodb:Scan
+      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/rooms
+    - Effect: Allow
+      Action: dynamodb:PutItem
+      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/rooms
+    - Effect: Allow
+      Action: dynamodb:Scan
       Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/messages.v2
     - Effect: Allow
       Action: dynamodb:PutItem
@@ -44,6 +50,7 @@ provider:
   environment:
     messages_table: messages.v2
     connections_table: connections
+    rooms_table: rooms
   tags:
     Client: Animando
     Application: HelloSls
@@ -104,6 +111,18 @@ resources:
                 KeyType: 'HASH'
             Projection:
               ProjectionType: ALL
+
+    roomsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: rooms
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: room
+            AttributeType: S
+        KeySchema:
+          - AttributeName: room
+            KeyType: HASH
 package:
   exclude:
     - node_modules/**

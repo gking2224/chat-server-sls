@@ -4,16 +4,13 @@ import { DynamoDB } from 'aws-sdk';
 
 const dynamodb = new DynamoDB.DocumentClient();
 
-export default async () => { // eslint-disable-line no-unused-vars
+export default async () => {
   const req: DocumentClient.ScanInput = {
-    TableName: EnvVariables.MessagesTable,
+    TableName: EnvVariables.RoomsTable,
     Limit: 100,
   };
   const rooms = await dynamodb.scan(req).promise()
     .then((resp) => resp.Items ? resp.Items : [])
-    .then((items) => {
-      return items.reduce<string[]>(
-        (rr, m) => rr.indexOf(m.room) !== -1 ? rr : [...rr, m.room], [] as string[]);
-    });
+    .then((items: any[]) => items.map((r) => r.room as string));
   return rooms;
 };
