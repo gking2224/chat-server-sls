@@ -1,6 +1,10 @@
 service: hello-sls
+custom:
+  webpack:
+    config: ./webpack.config.js
 
 plugins:
+  - serverless-webpack
   - serverless-pseudo-parameters
 
 provider:
@@ -39,32 +43,32 @@ provider:
     Application: HelloSls
 
 functions:
-  hello:
-    handler: functions/hello.handler
-    layers:
-      - ${file(./.env.yml):nodejsLayerArn}
-    events:
-      - http:
-          path: /
-          method: GET
-  get-messages:
-    handler: functions/get-messages.handler
-    layers:
-      - ${file(./.env.yml):nodejsLayerArn}
-    events:
-      - http:
-          path: /get-messages
-          method: GET
-          cors: true
-  post-message:
-    handler: functions/post-message.handler
-    layers:
-      - ${file(./.env.yml):nodejsLayerArn}
-    events:
-      - http:
-          path: /post-message
-          method: POST
-          cors: true
+  # hello:
+  #   handler: functions/hello.handler
+  #   layers:
+  #     - ${file(./.env.yml):nodejsLayerArn}
+  #   events:
+  #     - http:
+  #         path: /
+  #         method: GET
+  # get-messages:
+  #   handler: functions/get-messages.handler
+  #   layers:
+  #     - ${file(./.env.yml):nodejsLayerArn}
+  #   events:
+  #     - http:
+  #         path: /get-messages
+  #         method: GET
+  #         cors: true
+  # post-message:
+  #   handler: functions/post-message.handler
+  #   layers:
+  #     - ${file(./.env.yml):nodejsLayerArn}
+  #   events:
+  #     - http:
+  #         path: /post-message
+  #         method: POST
+  #         cors: true
   websocket:
     handler: functions/websocket.handler
     layers:

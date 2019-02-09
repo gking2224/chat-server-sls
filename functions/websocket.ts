@@ -1,8 +1,8 @@
-const AWS = require('aws-sdk');
+import AWS = require('aws-sdk');
 
-const saveConnection = require('../lib/save-connection');
-const saveMessage = require('../lib/save-message');
-const getMessages = require('../lib/get-messages');
+import saveConnection from '../lib/save-connection';
+import saveMessage from '../lib/save-message';
+import getMessages from '../lib/get-messages';
 
 const sendMessageToRoom = async (agma, connectionId, message) =>
   agma.postToConnection({
@@ -47,7 +47,7 @@ const processMessage = async (agma, connectionId, body) => {
     default:
   }
 };
-module.exports.handler = async (event) => {
+export const handler = async (event: any) => {
   const {
     eventType,
     connectionId,
@@ -55,7 +55,7 @@ module.exports.handler = async (event) => {
     stage,
   } = event.requestContext;
   const { queryStringParameters } = event;
-  const { room, author } = queryStringParameters || {};
+  const { room, author } = (queryStringParameters || {}) as any;
 
   const agma = new AWS.ApiGatewayManagementApi({
     endpoint: `${domainName}/${stage}`,

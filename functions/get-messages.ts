@@ -1,8 +1,8 @@
-const getMessages = require('../lib/get-messages');
+const getMessagesFn = require('../lib/get-messages');
 
 module.exports.handler = async (event, context) => { // eslint-disable-line no-unused-vars
   try {
-    const messages = await getMessages();
+    const messages = await getMessagesFn();
     return {
       statusCode: 200,
       body: JSON.stringify({

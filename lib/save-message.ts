@@ -1,16 +1,17 @@
-const AWS = require('aws-sdk');
+import envVariables from "./env-variables";
+import generateRandomId from '../lib/generate-random-id';
 
-const TableName = process.env.messages_table;
+import AWS = require('aws-sdk');
+import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const generateRandomId = require('../lib/generate-random-id');
 const getLanguage = require('../lib/get-language');
 const translateToEnglish = require('../lib/translate-to-english');
 
-module.exports = async ({ message, author, room }) => {
+export default async ({ message, author, room }) => {
   const language = await getLanguage(message);
 
-  const Item = {
+  const Item: any = {
     messageId: generateRandomId(),
     message,
     room,
@@ -21,8 +22,8 @@ module.exports = async ({ message, author, room }) => {
   if (language !== 'en') {
     Item.translation = await translateToEnglish(message, language);
   }
-  const req = {
-    TableName,
+  const req: DocumentClient.PutItemInput = {
+    TableName: envVariables.MessagesTable,
     Item,
   };
   await dynamodb.put(req).promise();

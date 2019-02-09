@@ -1,10 +1,10 @@
-const AWS = require('aws-sdk');
+import EnvVariables from './env-variables';
 
-const TableName = process.env.connections_table;
+const AWS = require('aws-sdk');
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-module.exports = async (connectionId, room, author) => {
+export default async (connectionId, room, author) => {
   const Item = {
     connectionId,
     room,
@@ -12,7 +12,7 @@ module.exports = async (connectionId, room, author) => {
   };
 
   const req = {
-    TableName,
+    TableName: EnvVariables.ConnectionsTable,
     Item,
   };
   return dynamodb.put(req).promise();
