@@ -1,6 +1,6 @@
 import createRoom from '../lib/create-room';
 
-const validateRoom = (body: unknown): void => {
+const validateRoom = (body: any): void => {
   return
 }
 
