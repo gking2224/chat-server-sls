@@ -1,7 +1,7 @@
 {
   "rootDir": ".",
   "roots": ["<rootDir>/"],
-  "setupTestFrameworkScriptFile": "<rootDir>/config/tests/setupTests.ts",
+  "setupTestFrameworkScriptFile": "<rootDir>/config/tests/setupTests.js",
   "snapshotSerializers": ["enzyme-to-json/serializer"],
   "transform": {
     "^.+\\.ts$": "ts-jest"
@@ -11,6 +11,8 @@
       "tsConfig": "tsconfig.json"
     }
   },
+   "globalSetup": "<rootDir>/config/tests/globalSetup.js",
+   "globalTeardown": "<rootDir>/config/tests/globalTeardown.js",
   "testRegex": "spec\\.[jt]s$",
   "moduleFileExtensions": [
     "ts",
