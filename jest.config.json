@@ -1,6 +1,6 @@
 {
   "rootDir": ".",
-  "roots": ["<rootDir>/"],
+  "roots": ["<rootDir>/tests"],
   "setupTestFrameworkScriptFile": "<rootDir>/config/tests/setupTests.js",
   "snapshotSerializers": ["enzyme-to-json/serializer"],
   "transform": {
@@ -22,7 +22,7 @@
   "testURL": "http://localhost",
   "moduleDirectories": [
     "node_modules",
-    "."
+    "./src"
   ],
   "moduleNameMapper": {
     "~/(.*)$": "<rootDir>/src/$1",

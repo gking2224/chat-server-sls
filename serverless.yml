@@ -57,18 +57,18 @@ provider:
 
 functions:
   websocket:
-    handler: functions/websocket.handler
+    handler: src/functions/websocket.handler
     layers:
       - ${file(./.env.yml):nodejsLayerArn}
   get-rooms:
-    handler: functions/get-rooms.handler
+    handler: src/functions/get-rooms.handler
     events:
       - http:
           path: /get-rooms
           method: GET
           cors: true
   create-room:
-    handler: functions/create-room.handler
+    handler: src/functions/create-room.handler
     events:
       - http:
           path: /create-room

@@ -1,7 +1,7 @@
 import when from './steps/when';
 import init from './steps/init';
 
-jest.mock('../lib/env-variables', () => ({
+jest.mock('../src/lib/env-variables', () => ({
   default: {
     RoomsTable: 'rooms',
     DynamoDbEndpoint: 'http://localhost:8000'
