@@ -1,0 +1,33 @@
+{
+  "rootDir": ".",
+  "roots": ["<rootDir>/"],
+  "setupTestFrameworkScriptFile": "<rootDir>/config/tests/setupTests.ts",
+  "globalSetup": "<rootDir>/config/tests/globalSetup.ts",
+  "globalTeardown": "<rootDir>/config/tests/globalTeardown.ts",
+  "snapshotSerializers": ["enzyme-to-json/serializer"],
+  "transform": {
+    "^.+\\.ts$": "ts-jest"
+  },
+  "globals": {
+    "ts-jest": {
+      "tsConfig": "tsconfig.json"
+    }
+  },
+  "testRegex": "spec\\.[jt]sx?$",
+  "moduleFileExtensions": [
+    "ts",
+    "js",
+    "json"
+  ],
+  "testURL": "http://localhost",
+  "moduleDirectories": [
+    "node_modules",
+    "."
+  ],
+  "moduleNameMapper": {
+    "~/(.*)$": "<rootDir>/src/$1",
+    "\\.(html|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|ogg|m4a|aac|oga|css|less|scss)": "<rootDir>/config/tests/fileMock.ts"
+  },
+  "collectCoverageFrom" : ["**/src/**/*.(ts|tsx|js|jsx)", "!**/*.d.ts"],
+  "coverageDirectory": "<rootDir>/reports/coverage"
+}

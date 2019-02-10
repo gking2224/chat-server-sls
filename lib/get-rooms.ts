@@ -2,7 +2,11 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import EnvVariables from './env-variables';
 import { DynamoDB } from 'aws-sdk';
 
-const dynamodb = new DynamoDB.DocumentClient();
+const dynamodb = new DynamoDB.DocumentClient({
+  service: new DynamoDB({
+    endpoint: EnvVariables.DynamoDbEndpoint
+  })
+});
 
 export default async () => {
   const req: DocumentClient.ScanInput = {

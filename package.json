@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "deploy": "sls deploy"
+    "deploy": "sls deploy",
+    "test": "AWS_REGION=eu-west-1 jest --config ./jest.config.json"
   },
   "keywords": [],
   "author": "",
@@ -16,16 +17,25 @@
   "peerDependencies": {
     "aws-sdk": "^2.398.0"
   },
+   "jest": {
+    "projects": [
+      "<rootDir>/config/tests/jest.config.json"
+    ]
+  },
   "devDependencies": {
+    "@types/jest": "^24.0.0",
     "@types/node": "^10.12.24",
-    "babel-eslint": "^10.0.1",
-    "babel-loader": "^8.0.5",
+    "awscred": "^1.4.2",
+    "enzyme": "^3.8.0",
+    "enzyme-to-json": "^3.3.5",
     "eslint": "^5.13.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.16.0",
+    "jest": "<23",
     "serverless-plugin-typescript": "^1.1.5",
     "serverless-plugin-webpack": "^1.5.1",
     "serverless-webpack": "^5.2.0",
+    "ts-jest": "^23.10.5",
     "ts-loader": "^5.3.3",
     "webpack": "^4.29.3"
   }
