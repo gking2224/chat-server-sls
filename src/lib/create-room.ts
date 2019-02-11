@@ -1,8 +1,7 @@
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { PutItemInput } from 'aws-sdk/clients/dynamodb';
 import EnvVariables from './env-variables';
-import { DynamoDB } from 'aws-sdk';
 
-const dynamodb = new DynamoDB.DocumentClient();
+import { dynamodb } from '../lib/libs';
 
 export default async (room: string) => {
 
@@ -10,7 +9,7 @@ export default async (room: string) => {
     room,
   };
 
-  const req: DocumentClient.PutItemInput = {
+  const req: PutItemInput = {
     TableName: EnvVariables.RoomsTable,
     Item,
   };
