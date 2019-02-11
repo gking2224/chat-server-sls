@@ -1,4 +1,4 @@
-import { handler as getRooms } from '../../src/functions/get-rooms';
+import { handler as getRooms } from '../../get-rooms';
 
 const we_invoke_get_rooms = async () => {
 

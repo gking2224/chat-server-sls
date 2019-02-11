@@ -13,7 +13,7 @@ const createTable = async (params) => {
     });
 };
 const createRoomsTable = async () => {
-  const params = {
+  const roomsSpec = {
     TableName: process.env.ROOMS_TABLE,
     AttributeDefinitions: [
       {
@@ -32,6 +32,54 @@ const createRoomsTable = async () => {
       WriteCapacityUnits: 1,
     },
   };
-  await createTable(params);
+  await createTable(roomsSpec);
 };
-module.exports = async () => createRoomsTable();
+const createMessagesTable = async () => {
+  const roomsSpec = {
+    TableName: process.env.MESSAGES_TABLE,
+    AttributeDefinitions: [
+      {
+        AttributeName: 'messageId',
+        AttributeType: 'S',
+      },
+      {
+        AttributeName: 'room',
+        AttributeType: 'S',
+      },
+    ],
+    KeySchema: [
+      {
+        AttributeName: 'messageId',
+        KeyType: 'HASH',
+      },
+    ],
+    GlobalSecondaryIndexes: [
+      {
+        IndexName: 'roomIdx',
+        KeySchema: [
+          {
+            AttributeName: 'room',
+            KeyType: 'HASH',
+          },
+        ],
+        Projection: {
+          ProjectionType: 'ALL',
+        },
+        ProvisionedThroughput: {
+          ReadCapacityUnits: 1,
+          WriteCapacityUnits: 1,
+        },
+      },
+    ],
+    ProvisionedThroughput: {
+      ReadCapacityUnits: 1,
+      WriteCapacityUnits: 1,
+    },
+  };
+  await createTable(roomsSpec);
+};
+
+module.exports = async () => Promise.all([
+  createMessagesTable(),
+  createRoomsTable(),
+]);

@@ -1,8 +1,6 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import EnvVariables from './env-variables';
-import { DynamoDB } from 'aws-sdk';
-
-const dynamodb = new DynamoDB.DocumentClient();
+import { dynamodb } from './libs';
 
 export default async (room: string) => { // eslint-disable-line no-unused-vars
   const req: DocumentClient.QueryInput = {

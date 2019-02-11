@@ -1,16 +1,10 @@
+import { dynamodb } from './libs';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import EnvVariables from './env-variables';
-import { DynamoDB } from 'aws-sdk';
-
-const dynamodb = new DynamoDB.DocumentClient({
-  service: new DynamoDB({
-    endpoint: EnvVariables.DynamoDbEndpoint
-  })
-});
+import envVariables from './env-variables';
 
 export default async () => {
   const req: DocumentClient.ScanInput = {
-    TableName: EnvVariables.RoomsTable,
+    TableName: envVariables.RoomsTable,
     Limit: 100,
   };
   const rooms = await dynamodb.scan(req).promise()

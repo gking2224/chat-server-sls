@@ -17,11 +17,6 @@
   "peerDependencies": {
     "aws-sdk": "^2.398.0"
   },
-  "jest": {
-    "projects": [
-      "<rootDir>/config/tests/jest.config.json"
-    ]
-  },
   "devDependencies": {
     "@types/jest": "^24.0.0",
     "@types/node": "^10.12.24",
