@@ -16,10 +16,10 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action: dynamodb:Scan
-      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/rooms
+      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${env:ROOMS_TABLE}
     - Effect: Allow
       Action: dynamodb:PutItem
-      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/rooms
+      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${env:ROOMS_TABLE}
     - Effect: Allow
       Action: dynamodb:Scan
       Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/messages.v2
@@ -123,7 +123,7 @@ resources:
     roomsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: rooms
+        TableName: ${env:ROOMS_TABLE}
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: room
