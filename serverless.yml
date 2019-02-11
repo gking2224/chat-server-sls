@@ -50,7 +50,8 @@ provider:
   environment:
     messages_table: messages.v2
     connections_table: connections
-    rooms_table: rooms
+    ROOMS_TABLE: ${env:ROOMS_TABLE}
+    DYNAMO_DB_ENDPOINT: ${env:DYNAMO_DB_ENDPOINT}
   tags:
     Client: Animando
     Application: HelloSls

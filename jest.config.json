@@ -26,7 +26,7 @@
   ],
   "moduleNameMapper": {
     "~/(.*)$": "<rootDir>/src/$1",
-    "\\.(html|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|ogg|m4a|aac|oga|css|less|scss)": "<rootDir>/config/tests/fileMock.ts"
+    "\\.(html|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|ogg|m4a|aac|oga|css|less|scss)": "<rootDir>/config/tests/fileMock.js"
   },
   "collectCoverageFrom" : ["**/src/**/*.(ts|js)", "!**/*.d.ts"],
   "coverageDirectory": "<rootDir>/reports/coverage"

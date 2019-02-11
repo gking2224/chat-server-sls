@@ -12,7 +12,7 @@ beforeAll(async () => {
   await init();
 });
 
-describe('GET /get-rooms functiosn', () => {
+describe('GET /get-rooms function', () => {
   it('should return the rooms', async () => {
     const res = await when.we_invoke_get_rooms();
     expect(res.statusCode).toEqual(200);

@@ -9,6 +9,7 @@ const dynamodb = new DynamoDB.DocumentClient({
 });
 
 export default async () => {
+  console.log('getRooms', EnvVariables.DynamoDbEndpoint, EnvVariables.RoomsTable);
   const req: DocumentClient.ScanInput = {
     TableName: EnvVariables.RoomsTable,
     Limit: 100,

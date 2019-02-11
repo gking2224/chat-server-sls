@@ -14,6 +14,6 @@
       "es2015",
       "esnext.asynciterable"
     ],
-    "rootDir": "./src"
+    "rootDir": "."
   }
 }

@@ -1,23 +1,30 @@
+#!/usr/bin/env node
+
 const AWS = require('aws-sdk');
 
 const dynamodb = new AWS.DynamoDB({
-  endpoint: 'http://localhost:8000',
+  endpoint: process.env.DYNAMO_DB_ENDPOINT,
 });
 
+const roomsTableName = process.env.ROOMS_TABLE || 'test_rooms';
+
 const createTable = async (params) => {
-  await dynamodb.createTable(params).promise()
-    .then(() => console.log(`Created '${params.TableName}' table`))
+  console.log(`Create table ${params.TableName} at ${process.env.DYNAMO_DB_ENDPOINT}`);
+  return dynamodb.createTable(params).promise()
+    .then((res) => {
+      console.log(`Created '${params.TableName}' table: ${res}`);
+      return res;
+    })
     .catch((e) => {
       if (e.code === 'Cannot create preexisting table') {
         console.warn(`Table already exists: ${params.TableName}`);
-      } else {
-        throw e;
       }
+      console.log(e);
     });
 };
 const createRoomsTable = async () => {
   const params = {
-    TableName: 'rooms',
+    TableName: roomsTableName,
     AttributeDefinitions: [
       {
         AttributeName: 'room',
@@ -35,6 +42,13 @@ const createRoomsTable = async () => {
       WriteCapacityUnits: 1,
     },
   };
-  await createTable(params);
+  return createTable(params);
 };
-module.exports = async () => createRoomsTable();
+createRoomsTable()
+  .then((res) => {
+    console.log(`Complete: ${res}`);
+  })
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
