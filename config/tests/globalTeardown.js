@@ -1,9 +1,5 @@
 
-const AWS = require('aws-sdk');
-
-const dynamodb = new AWS.DynamoDB({
-  endpoint: 'http://localhost:8000',
-});
+const { dynamodb } = require('./lib');
 
 const deleteTable = async (tableName) => {
   const params = {
@@ -20,5 +16,5 @@ const deleteTable = async (tableName) => {
     });
 };
 module.exports = async () => {
-  await deleteTable('rooms');
+  await deleteTable(process.env.ROOMS_TABLE);
 };

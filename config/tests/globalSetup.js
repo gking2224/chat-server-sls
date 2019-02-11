@@ -1,14 +1,11 @@
-const AWS = require('aws-sdk');
 
-const dynamodb = new AWS.DynamoDB({
-  endpoint: 'http://localhost:8000',
-});
+const { dynamodb } = require('./lib');
 
 const createTable = async (params) => {
   await dynamodb.createTable(params).promise()
     .then(() => console.log(`Created '${params.TableName}' table`))
     .catch((e) => {
-      if (e.code === 'Cannot create preexisting table') {
+      if (e.code === 'ResourceInUseException') {
         console.warn(`Table already exists: ${params.TableName}`);
       } else {
         throw e;
@@ -17,7 +14,7 @@ const createTable = async (params) => {
 };
 const createRoomsTable = async () => {
   const params = {
-    TableName: 'rooms',
+    TableName: process.env.ROOMS_TABLE,
     AttributeDefinitions: [
       {
         AttributeName: 'room',

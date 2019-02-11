@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "deploy": "sls deploy",
-    "test": "AWS_REGION=eu-west-1 jest --config ./jest.config.json"
+    "deploy": "node -r dotenv-safe/config ./node_modules/.bin/sls deploy",
+    "test": "node -r ./config/tests/test-require.js ./node_modules/.bin/jest --config ./jest.config.json"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +26,8 @@
     "@types/jest": "^24.0.0",
     "@types/node": "^10.12.24",
     "awscred": "^1.4.2",
+    "dotenv": "^6.2.0",
+    "dotenv-safe": "^6.1.0",
     "enzyme": "^3.8.0",
     "enzyme-to-json": "^3.3.5",
     "eslint": "^5.13.0",

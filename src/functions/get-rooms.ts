@@ -14,7 +14,7 @@ export const handler = async (event: any, context: any) => { // eslint-disable-l
       },
     };
   } catch (e) {
-    console.error(e);
+    console.error(`Get rooms failed: ${e}`);
     return {
       statusCode: 500,
       body: JSON.stringify({
