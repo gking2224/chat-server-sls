@@ -1,15 +1,16 @@
-import { PutItemInput } from 'aws-sdk/clients/dynamodb';
 import EnvVariables from './env-variables';
 
 import { dynamodb } from '../lib/libs';
+import { RoomName, RoomEntity } from '../model/domain/room';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 
-export default async (room: string) => {
+export default async (room: RoomName): Promise<RoomEntity> => {
 
-  const Item: any = {
+  const Item: RoomEntity = {
     room,
   };
 
-  const req: PutItemInput = {
+  const req: DocumentClient.PutItemInput = {
     TableName: EnvVariables.RoomsTable,
     Item,
   };

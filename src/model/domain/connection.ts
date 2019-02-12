@@ -1,8 +1,11 @@
+import { Author } from "./message";
+import { RoomName } from "./room";
+
 export type ConnectionId = string;
 
 
 export interface SavedConnection {
-  readonly room: string;
+  readonly room: RoomName;
   readonly connectionId: ConnectionId;
-  readonly author: string;
+  readonly author: Author;
 }

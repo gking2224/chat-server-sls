@@ -1,19 +1,14 @@
 import createRoom from '../lib/create-room';
+import { validateCreateRoomBody, CreateRoomBody } from '../model/api/room';
 
-const validateRoom = (body: any): void => {
-  return
-}
-
-module.exports.handler = async (event: any, context: any) => { // eslint-disable-line no-unused-vars
+export const handler = async (event: any = {}) => {
   try {
-    const body = JSON.parse(event.body);
-    validateRoom(body);
-    const rooms = await createRoom(body.room);
+    if (!event.body) throw new Error('no event body');
+    const body = validateCreateRoomBody(JSON.parse(event.body));
+    const room = await createRoom(body.room);
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        rooms
-      }),
+      body: JSON.stringify(room),
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,

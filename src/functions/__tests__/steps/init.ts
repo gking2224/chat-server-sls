@@ -1,6 +1,4 @@
 import * as AWS from 'aws-sdk';
-import * as awscred from 'awscred';
-import { Credentials } from 'aws-sdk';
 
 let initialized = false;
 

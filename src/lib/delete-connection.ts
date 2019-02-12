@@ -1,14 +1,15 @@
 import EnvVariables from './env-variables';
 
 import { dynamodb } from './libs';
-import { DeleteItemInput, Key } from 'aws-sdk/clients/dynamodb';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { ConnectionId } from '../model/domain/connection';
 
-export default async (connectionId: string) => {
+export default async (connectionId: ConnectionId) => {
   console.log('delete connection', connectionId);
-  const req: DeleteItemInput = {
+  const req: DocumentClient.DeleteItemInput = {
     Key: ({
       connectionId
-    }) as Key,
+    }),
     TableName: EnvVariables.ConnectionsTable,
   };
   return dynamodb.delete(req).promise()

@@ -1,10 +1,10 @@
-import { BatchWriteItemInput, PutItemInputAttributeMap, Key } from "aws-sdk/clients/dynamodb";
+import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import { dynamodb } from '../src/lib/libs';
 
 export const putItems = async (tableName: string, items: object[]) => {
-  const req: BatchWriteItemInput = {
+  const req: DocumentClient.BatchWriteItemInput = {
     RequestItems: {
-      [tableName]: items.map((Item: PutItemInputAttributeMap) => ({
+      [tableName]: items.map((Item) => ({
         PutRequest: {
           Item
         }
@@ -14,11 +14,11 @@ export const putItems = async (tableName: string, items: object[]) => {
   return dynamodb.batchWrite(req).promise();
 }
 export const deleteItems = async (tableName: string, key: string, ids: string[]) => {
-  const req: BatchWriteItemInput = {
+  const req: DocumentClient.BatchWriteItemInput = {
     RequestItems: {
       [tableName]: ids.map((id: string) => ({
         DeleteRequest: {
-          Key: ({ [key]: id } as Key)
+          Key: { [key]: id }
         }
       }))
     }

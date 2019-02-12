@@ -1,13 +1,19 @@
+import { RoomName } from "./room";
+
+export type Author = string;
+export type LanguageCode = string;
+export type MessageText = string;
+export type MessageId = string;
+
 
 export interface PendingMessage {
-  readonly room: string;
-  readonly message: string;
-  readonly author: string;
-
+  readonly room: RoomName;
+  readonly message: MessageText;
+  readonly author: Author;
 }
 
 export interface SavedMessage extends PendingMessage {
-  readonly language: string;
-  readonly messageId: string;
-  readonly translation?: string;
+  readonly language: LanguageCode;
+  readonly messageId: MessageId;
+  readonly translation?: MessageText;
 }

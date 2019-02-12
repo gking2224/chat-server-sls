@@ -1,9 +1,9 @@
 import { dynamodb } from './libs';
-import { ScanInput } from 'aws-sdk/clients/dynamodb';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import envVariables from './env-variables';
 
 export default async () => {
-  const req: ScanInput = {
+  const req: DocumentClient.ScanInput = {
     TableName: envVariables.RoomsTable,
     Limit: 100,
   };

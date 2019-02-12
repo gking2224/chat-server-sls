@@ -2,8 +2,9 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import EnvVariables from './env-variables';
 import { dynamodb } from './libs';
 import { SavedConnection } from '../model/domain/connection';
+import { RoomName } from '../model/domain/room';
 
-export default async (room: string): Promise<SavedConnection[]> => { // eslint-disable-line no-unused-vars
+export default async (room: RoomName): Promise<SavedConnection[]> => { // eslint-disable-line no-unused-vars
   const req: DocumentClient.QueryInput = {
     TableName: EnvVariables.ConnectionsTable,
     IndexName: 'roomIdx',

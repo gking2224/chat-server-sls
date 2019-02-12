@@ -1,5 +1,15 @@
 import getRooms from '../lib/get-rooms';
 
+import * as Runtypes from 'runtypes';
+
+const GetRoomsBodyValidationType = Runtypes.Record({});
+
+type GetRoomsBody = Runtypes.Static<typeof GetRoomsBodyValidationType>;
+
+const validateEvent = (body: any): GetRoomsBody => {
+  return GetRoomsBodyValidationType.check(body);
+}
+
 export const handler = async (event: any, context: any) => { // eslint-disable-line no-unused-vars
   try {
     const rooms = await getRooms();

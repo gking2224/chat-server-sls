@@ -1,8 +1,9 @@
 import { PendingMessage, SavedMessage } from "../domain/message";
+import { RoomName } from "../domain/room";
 
 export interface DoInitialize {
   readonly action: 'init';
-  readonly room: string;
+  readonly room: RoomName;
 }
 export interface PostNewMessage {
   readonly action: 'message';
