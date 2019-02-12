@@ -78,8 +78,53 @@ const createMessagesTable = async () => {
   };
   await createTable(roomsSpec);
 };
+const createConnectionsTable = async () => {
+  const roomsSpec = {
+    TableName: process.env.CONNECTIONS_TABLE,
+    AttributeDefinitions: [
+      {
+        AttributeName: 'connectionId',
+        AttributeType: 'S',
+      },
+      {
+        AttributeName: 'room',
+        AttributeType: 'S',
+      },
+    ],
+    KeySchema: [
+      {
+        AttributeName: 'connectionId',
+        KeyType: 'HASH',
+      },
+    ],
+    GlobalSecondaryIndexes: [
+      {
+        IndexName: 'roomIdx',
+        KeySchema: [
+          {
+            AttributeName: 'room',
+            KeyType: 'HASH',
+          },
+        ],
+        Projection: {
+          ProjectionType: 'ALL',
+        },
+        ProvisionedThroughput: {
+          ReadCapacityUnits: 1,
+          WriteCapacityUnits: 1,
+        },
+      },
+    ],
+    ProvisionedThroughput: {
+      ReadCapacityUnits: 1,
+      WriteCapacityUnits: 1,
+    },
+  };
+  await createTable(roomsSpec);
+};
 
 module.exports = async () => Promise.all([
   createMessagesTable(),
   createRoomsTable(),
+  createConnectionsTable(),
 ]);

@@ -46,6 +46,9 @@ provider:
       Action: dynamodb:PutItem
       Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:custom.tables.connections}
     - Effect: Allow
+      Action: dynamodb:Query
+      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:custom.tables.connections}/index/roomIdx
+    - Effect: Allow
       Action: comprehend:DetectDominantLanguage
       Resource: "*"
     - Effect: Allow

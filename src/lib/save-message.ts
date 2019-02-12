@@ -2,26 +2,31 @@ import envVariables from "./env-variables";
 import generateRandomId from '../lib/generate-random-id';
 
 import { dynamodb } from './libs';
-import { PutItemInput } from "aws-sdk/clients/dynamodb";
+import { SavedMessage } from "../model/domain/message";
+import { PostNewMessage } from "../model/api/message";
+import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
-const getLanguage = require('../lib/get-language');
-const translateToEnglish = require('../lib/translate-to-english');
+import getLanguage from '../lib/get-language';
+import translateToEnglish from '../lib/translate-to-english';
 
-export default async ({ message, author, room }) => {
-  const language = await getLanguage(message);
+export default async (event: PostNewMessage): Promise<SavedMessage> => {
+  const { message } = event;
+  const { message: text, room, author } = message;
+  const language = await getLanguage(text);
 
-  const Item: any = {
+  let Item: SavedMessage = {
     messageId: generateRandomId(),
-    message,
+    message: text,
     room,
     author,
     language,
   };
 
   if (language !== 'en') {
-    Item.translation = await translateToEnglish(message, language);
+    const translation = await translateToEnglish(text, language);
+    Item = { ...Item, translation };
   }
-  const req: PutItemInput = {
+  const req: DocumentClient.PutItemInput = {
     TableName: envVariables.MessagesTable,
     Item,
   };

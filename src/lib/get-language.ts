@@ -20,7 +20,10 @@ const pickLanguage = (res: DetectDominantLanguageResponse): string => {
   return chosen.LanguageCode;
 }
 
-module.exports = async (text: string) => comprehend.detectDominantLanguage({
-  Text: text,
-}).promise()
-  .then(pickLanguage);
+export default async (text: string) => {
+  console.log(`Get Language: ${text}`);
+  return comprehend.detectDominantLanguage({
+    Text: text,
+  }).promise()
+    .then(pickLanguage);
+}

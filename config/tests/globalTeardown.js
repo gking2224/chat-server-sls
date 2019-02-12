@@ -18,4 +18,5 @@ const deleteTable = async (tableName) => {
 module.exports = async () => Promise.all([
   deleteTable(process.env.ROOMS_TABLE),
   deleteTable(process.env.MESSAGES_TABLE),
+  deleteTable(process.env.CONNECTIONS_TABLE),
 ]);

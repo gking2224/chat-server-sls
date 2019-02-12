@@ -1,8 +1,9 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import EnvVariables from './env-variables';
 import { dynamodb } from './libs';
+import { SavedMessage } from '../model/domain/message';
 
-export default async (room: string) => { // eslint-disable-line no-unused-vars
+export default async (room: string): Promise<SavedMessage[]> => {
   const req: DocumentClient.QueryInput = {
     TableName: EnvVariables.MessagesTable,
     IndexName: 'roomIdx',
@@ -11,6 +12,7 @@ export default async (room: string) => { // eslint-disable-line no-unused-vars
       ":room": room
     },
   };
-  const resp = await dynamodb.query(req).promise();
-  return resp.Items;
+  return await dynamodb.query(req).promise()
+    .then((resp) => resp.Items || [])
+    .then((rr) => rr.map((r) => r as SavedMessage));
 };

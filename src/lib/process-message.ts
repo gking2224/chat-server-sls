@@ -2,38 +2,39 @@ import { Agma } from "../functions/websocket";
 
 import saveMessage from './save-message';
 import getMessages from './get-messages';
+import { IncomingSocketMessage, PostNewMessage, DoInitialize } from "../model/api/message";
+import { SavedMessage } from "../model/domain/message";
+import getConnectionsByRoom from "./get-connections-by-room";
+import { publishMessage } from "./publish-to-websocket";
+import { ConnectionId } from "../model/domain/connection";
 
-const sendMessages = async (agma: Agma, connectionId: string, messages) => {
-  const sent = await agma.postToConnection({
-    ConnectionId: connectionId,
-    Data: JSON.stringify({ action: 'init', messages }),
-  }).promise();
-  return sent;
+const sendAllRoomMessages = async (agma: Agma, connectionId: ConnectionId, messages: SavedMessage[]) => {
+  await publishMessage(agma, connectionId, { action: 'init', messages });
 };
 
-const sendMessageToRoom = async (agma, connectionId, message) =>
-  agma.postToConnection({
-    ConnectionId: connectionId,
-    Data: JSON.stringify({ action: 'message', message }),
-  }).promise();
+const sendMessageToRoom = async (agma: Agma, message: SavedMessage) => {
+  const connectionIds = await getConnectionsByRoom(message.room)
+    .then((c) => c.map((c) => c.connectionId));
+  await publishMessage(agma, connectionIds, { action: 'message', message });
+}
 
-const sendAllMessages = async (agma: Agma, connectionId: string, room: string) => {
-  const messages = await getMessages(room);
-  await sendMessages(agma, connectionId, messages);
+const onInitialiseConnection = async (agma: Agma, connectionId: ConnectionId, message: DoInitialize) => {
+  const messages = await getMessages(message.room);
+  await sendAllRoomMessages(agma, connectionId, messages);
 };
 
-const doSaveMessage = async (agma: Agma, connectionId: string, message) => {
+const onMessageReceived = async (agma: Agma, message: PostNewMessage) => {
   const saved = await saveMessage(message);
-  await sendMessageToRoom(agma, connectionId, saved);
+  await sendMessageToRoom(agma, saved);
 };
 
-export const processMessage = async (agma: Agma, connectionId: string, body) => {
+export const processMessage = async (agma: Agma, connectionId: ConnectionId, body: IncomingSocketMessage) => {
   switch (body.action) {
     case 'init':
-      await sendAllMessages(agma, connectionId, body.room);
+      await onInitialiseConnection(agma, connectionId, body);
       break;
     case 'message':
-      await doSaveMessage(agma, connectionId, body.message);
+      await onMessageReceived(agma, body);
       break;
     default:
   }

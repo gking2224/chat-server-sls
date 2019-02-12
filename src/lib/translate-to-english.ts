@@ -5,7 +5,8 @@ const translate = new AWS.Translate();
 
 const getTranslatedText = (t: Translate.Types.TranslateTextResponse) => t.TranslatedText;
 
-module.exports = async (text: string, language: string) => {
+export default async (text: string, language: string) => {
+  console.log(`Translated to english from ${language}: ${text}`);
   const params = {
     SourceLanguageCode: language,
     TargetLanguageCode: 'en',
