@@ -1,9 +1,7 @@
 import EnvVariables from './env-variables';
 
 import { dynamodb } from './libs';
-import { ConnectionId } from '../model/domain/connection';
-import { Author } from '../model/domain/message';
-import { RoomName } from '../model/domain/room';
+import { ConnectionId, RoomName, Author } from 'chat-types';
 
 export default async (connectionId: ConnectionId, room: RoomName, author: Author) => {
   const Item = {

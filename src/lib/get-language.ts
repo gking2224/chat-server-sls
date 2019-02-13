@@ -1,6 +1,6 @@
 import { DetectDominantLanguageResponse, DominantLanguage, Float } from 'aws-sdk/clients/comprehend';
 import { Comprehend } from 'aws-sdk';
-import { LanguageCode, MessageText } from '../model/domain/message';
+import { LanguageCode, MessageText } from 'chat-types';
 
 const comprehend = new Comprehend();
 

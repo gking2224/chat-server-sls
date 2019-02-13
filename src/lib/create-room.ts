@@ -1,8 +1,9 @@
 import EnvVariables from './env-variables';
 
 import { dynamodb } from '../lib/libs';
-import { RoomName, RoomEntity } from '../model/domain/room';
+import { RoomEntity } from '../model/domain/room';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { RoomName } from 'chat-types';
 
 export default async (room: RoomName): Promise<RoomEntity> => {
 

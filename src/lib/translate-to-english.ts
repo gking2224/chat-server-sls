@@ -1,6 +1,6 @@
 import AWS = require('aws-sdk');
 import { Translate } from 'aws-sdk';
-import { MessageText, LanguageCode } from '../model/domain/message';
+import { MessageText, LanguageCode } from 'chat-types';
 
 const translate = new AWS.Translate();
 

@@ -1,8 +1,7 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import EnvVariables from './env-variables';
 import { dynamodb } from './libs';
-import { SavedConnection } from '../model/domain/connection';
-import { RoomName } from '../model/domain/room';
+import { RoomName, SavedConnection } from 'chat-types';
 
 export default async (room: RoomName): Promise<SavedConnection[]> => { // eslint-disable-line no-unused-vars
   const req: DocumentClient.QueryInput = {

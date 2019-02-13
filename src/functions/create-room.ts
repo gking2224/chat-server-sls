@@ -1,5 +1,6 @@
 import createRoom from '../lib/create-room';
-import { validateCreateRoomBody, CreateRoomBody } from '../model/api/room';
+
+import { validateCreateRoomBody } from 'chat-types';
 
 export const handler = async (event: any = {}) => {
   try {
