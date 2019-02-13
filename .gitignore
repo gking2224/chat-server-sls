@@ -11,3 +11,6 @@ serverless-spec.yml
 .env.test
 .build
 .webpack
+
+.DS_Store
+
