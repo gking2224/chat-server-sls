@@ -10,3 +10,5 @@ serverless-spec.yml
 .env
 .env.test
 .build
+
+.webpack
