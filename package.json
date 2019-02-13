@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "deploy": "node -r dotenv-safe/config ./node_modules/.bin/sls deploy",
+    "invoke-local": "node -r dotenv-safe/config ./node_modules/.bin/sls invoke local -f",
     "test": "node -r ./config/tests/test-require.js ./node_modules/.bin/jest --config ./jest.config.json"
   },
   "keywords": [],

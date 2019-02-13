@@ -1,8 +1,7 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import EnvVariables from './env-variables';
 import { dynamodb } from './libs';
-import { SavedMessage } from '../model/domain/message';
-import { RoomName } from '../model/domain/room';
+import { SavedMessage, RoomName } from 'chat-types';
 
 export default async (room: RoomName): Promise<SavedMessage[]> => {
   const req: DocumentClient.QueryInput = {

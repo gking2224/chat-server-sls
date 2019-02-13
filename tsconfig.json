@@ -14,6 +14,16 @@
       "es2015",
       "esnext.asynciterable"
     ],
-    "rootDir": "."
-  }
+    "rootDirs": [
+      "../chat-types",
+      "."
+    ],
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "../chat-types/*.d.ts"
+  ]
 }

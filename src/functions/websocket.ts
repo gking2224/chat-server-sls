@@ -3,12 +3,9 @@ import deleteConnection from '../lib/delete-connection';
 import { ApiGatewayManagementApi } from 'aws-sdk';
 import { processMessage } from '../lib/process-message';
 import { ConnectionId } from 'aws-sdk/clients/directconnect';
-import { Author } from '../model/domain/message';
-import { RoomName } from '../model/domain/room';
+import { RoomName, Author } from 'chat-types';
 
-export type Agma = ApiGatewayManagementApi;
-
-const sendError = async (agma: Agma, connectionId: ConnectionId, error: any) =>
+const sendError = async (agma: ApiGatewayManagementApi, connectionId: ConnectionId, error: any) =>
   agma.postToConnection({
     ConnectionId: connectionId,
     Data: JSON.stringify({ error }),

@@ -1,6 +1,7 @@
 import createRoom from '../lib/create-room';
-import { validateCreateRoomBody, CreateRoomBody } from '../model/api/room';
 import { corsHeaders } from '../lib/cors';
+import { validateCreateRoomBody } from 'chat-types';
+
 export const handler = async (event: any = {}) => {
   try {
     if (!event.body) throw new Error('no event body');
