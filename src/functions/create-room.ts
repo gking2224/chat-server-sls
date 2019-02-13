@@ -1,6 +1,6 @@
 import createRoom from '../lib/create-room';
 import { validateCreateRoomBody, CreateRoomBody } from '../model/api/room';
-
+import { corsHeaders } from '../lib/cors';
 export const handler = async (event: any = {}) => {
   try {
     if (!event.body) throw new Error('no event body');
@@ -10,8 +10,7 @@ export const handler = async (event: any = {}) => {
       statusCode: 200,
       body: JSON.stringify(room),
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
+        ...corsHeaders
       },
     };
   } catch (e) {
@@ -22,8 +21,7 @@ export const handler = async (event: any = {}) => {
         error: e,
       }),
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
+        ...corsHeaders
       },
     };
   }

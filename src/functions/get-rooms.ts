@@ -1,6 +1,7 @@
 import getRooms from '../lib/get-rooms';
 
 import * as Runtypes from 'runtypes';
+import { corsHeaders } from '../lib/cors';
 
 const GetRoomsBodyValidationType = Runtypes.Record({});
 
@@ -19,8 +20,7 @@ export const handler = async (event: any, context: any) => { // eslint-disable-l
         rooms
       }),
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
+        ...corsHeaders
       },
     };
   } catch (e) {
@@ -32,8 +32,7 @@ export const handler = async (event: any, context: any) => { // eslint-disable-l
         error: e,
       }),
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
+        ...corsHeaders
       },
     };
   }

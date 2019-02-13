@@ -62,6 +62,7 @@ provider:
     CONNECTIONS_TABLE: ${self:custom.tables.connections}
     ROOMS_TABLE: ${self:custom.tables.rooms}
     DYNAMO_DB_ENDPOINT: ${self:custom.config.dynamo_db_endpoint}
+    CORS_ORIGINS: ${env:CORS_ORIGINS}
   tags:
     Client: Animando
     Application: ChatServer
@@ -77,7 +78,8 @@ functions:
       - http:
           path: /get-rooms
           method: GET
-          cors: true
+          cors:
+            origin: ${env:CORS_ORIGINS}
   create-room:
     handler: src/functions/create-room.handler
     events:
