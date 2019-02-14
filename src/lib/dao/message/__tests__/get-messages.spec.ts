@@ -41,12 +41,15 @@ describe('get-messages', () => {
     author: 'gk'
   };
   const allData = [positiveMatch, negativeMatch, noTranslation, invalidMessage, validMessage];
+
   beforeAll(async () => {
     return putItems(envVariables.MessagesTable, allData, false)
   });
+
   afterAll(async () => {
     return deleteItems(envVariables.MessagesTable, 'messageId', allData.map(i => i.messageId));
   });
+
   it('should return the messages for the given room', async () => {
     const messages = await when.we_invoke_get_messages(room);
     expect(messages).toEqual([positiveMatch]);
