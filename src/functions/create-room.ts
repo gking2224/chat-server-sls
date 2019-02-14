@@ -1,15 +1,15 @@
 import createRoom from '../lib/create-room';
 import { corsHeaders } from '../lib/cors';
-import { validateCreateRoomBody } from 'chat-types';
+import { validateCreateRoomBody, validateCreateRoomResponse, CreateRoomBody } from 'chat-types';
 
 export const handler = async (event: any = {}) => {
   try {
     if (!event.body) throw new Error('no event body');
-    const body = validateCreateRoomBody(JSON.parse(event.body));
-    const room = await createRoom(body.room);
+    const body: CreateRoomBody = validateCreateRoomBody(event.body);
+    const response = await createRoom(body.roomName);
     return {
       statusCode: 200,
-      body: JSON.stringify(room),
+      body: JSON.stringify(validateCreateRoomResponse({ roomName: response.room })),
       headers: {
         ...corsHeaders
       },

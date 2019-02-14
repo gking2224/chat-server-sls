@@ -3,6 +3,7 @@ import init from './steps/init';
 
 import envVariables from '../env-variables';
 import { putItems, deleteItems } from '../../../tests/data-helper';
+import { ConnectionEntity } from 'chat-types';
 
 beforeAll(async () => {
   await init();
@@ -15,13 +16,15 @@ describe('get-connections-by-room', () => {
   const positiveMatch = {
     connectionId: 'connectionId1',
     room,
+    author: 'gk'
   };
-  const negativeMatch = {
+  const negativeMatch: ConnectionEntity = {
     connectionId: 'connectionId2',
     room: 'anotherRoom',
+    author: 'gk'
   };
   beforeAll(async () => {
-    return putItems(envVariables.ConnectionsTable, [positiveMatch, negativeMatch])
+    return putItems(envVariables.ConnectionsTable, [positiveMatch, negativeMatch]);
   });
   afterAll(async () => {
     return deleteItems(envVariables.ConnectionsTable, 'connectionId', [positiveMatch, negativeMatch].map(i => i.connectionId));

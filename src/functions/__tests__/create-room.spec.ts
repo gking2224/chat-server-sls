@@ -1,6 +1,7 @@
 import when from './steps/when';
 import init from './steps/init';
 import { expectErrorMessage } from '../../../tests/assertion-helpers';
+import { CreateRoomBody, validateCreateRoomResponse } from 'chat-types';
 
 beforeAll(async () => {
   await init();
@@ -8,13 +9,28 @@ beforeAll(async () => {
 
 describe('POST /create-room function', () => {
   it('should create a room', async () => {
-    const event = { body: JSON.stringify({ room: 'testCreateRoom' }) };
+    const reqBody: CreateRoomBody = {
+      roomName: 'testCreateRoom'
+    }
+    const event = { body: JSON.stringify(reqBody) };
     const res = await when.we_invoke_create_room(event);
     expect(res.statusCode).toEqual(200);
-    expect(res.body).toEqual(JSON.stringify({ room: "testCreateRoom" }));
+    const resBody = validateCreateRoomResponse(JSON.parse(res.body));
+    expect(resBody.roomName).toEqual("testCreateRoom");
+  })
+  it('should create a room, ignoring additional properties', async () => {
+    const reqBody = {
+      roomName: 'testCreateRoom2',
+      someOther: 'x'
+    }
+    const event = { body: JSON.stringify(reqBody) };
+    const res = await when.we_invoke_create_room(event);
+    expect(res.statusCode).toEqual(200);
+    const resBody = validateCreateRoomResponse(JSON.parse(res.body));
+    expect(resBody.roomName).toEqual("testCreateRoom2");
   })
   it('should handle invalid room type', async () => {
-    const event = { body: JSON.stringify({ room: 2 }) };
+    const event = { body: JSON.stringify({ roomName: 2 }) };
     const res = await when.we_invoke_create_room(event);
     expect(res.statusCode).toEqual(500);
     expectErrorMessage(res).toEqual('Expected string, but was number');

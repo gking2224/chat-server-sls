@@ -1,8 +1,8 @@
 import { ApiGatewayManagementApi } from "aws-sdk";
-import { ConnectionId, OutgoingSocketMessage } from "chat-types";
+import { WebsocketMessageResponse, ConnectionId } from "chat-types";
 
 export const publishMessage =
-  (agma: ApiGatewayManagementApi, connectionId: ConnectionId | ConnectionId[], message: OutgoingSocketMessage) => {
+  (agma: ApiGatewayManagementApi, connectionId: ConnectionId | ConnectionId[], message: WebsocketMessageResponse) => {
     let connectionIds = Array.isArray(connectionId) ? connectionId : [connectionId];
     const payload = JSON.stringify(message);
     return Promise.all(connectionIds.map((c) => {

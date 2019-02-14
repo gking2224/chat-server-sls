@@ -1,19 +1,19 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import EnvVariables from './env-variables';
 import { dynamodb } from './libs';
-import { RoomName, SavedConnection } from 'chat-types';
+import { ConnectionEntity, validateConnectionEntity } from 'chat-types';
 
-export default async (room: RoomName): Promise<SavedConnection[]> => { // eslint-disable-line no-unused-vars
+export default async (roomName: string): Promise<ConnectionEntity[]> => {
   const req: DocumentClient.QueryInput = {
     TableName: EnvVariables.ConnectionsTable,
     IndexName: 'roomIdx',
     KeyConditionExpression: "room = :room",
     ExpressionAttributeValues: {
-      ":room": room
+      ":room": roomName
     },
   };
   return dynamodb.query(req).promise()
     .then((r) => r.Items)
     .then((items) => items || [])
-    .then((items) => items.map((i: any) => (i as SavedConnection)));
+    .then((items) => items.map((i: any) => validateConnectionEntity(i)));
 };

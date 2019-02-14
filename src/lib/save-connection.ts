@@ -1,10 +1,10 @@
 import EnvVariables from './env-variables';
 
 import { dynamodb } from './libs';
-import { ConnectionId, RoomName, Author } from 'chat-types';
+import { ConnectionId, ConnectionEntity } from 'chat-types';
 
-export default async (connectionId: ConnectionId, room: RoomName, author: Author) => {
-  const Item = {
+export default async (connectionId: ConnectionId, room: string, author: string) => {
+  const Item: ConnectionEntity = {
     connectionId,
     room,
     author,
@@ -14,5 +14,6 @@ export default async (connectionId: ConnectionId, room: RoomName, author: Author
     TableName: EnvVariables.ConnectionsTable,
     Item,
   };
-  return dynamodb.put(req).promise();
+  await dynamodb.put(req).promise();
+  return Item;
 };

@@ -1,24 +1,15 @@
 import getRooms from '../lib/get-rooms';
-
-import * as Runtypes from 'runtypes';
 import { corsHeaders } from '../lib/cors';
-
-const GetRoomsBodyValidationType = Runtypes.Record({});
-
-type GetRoomsBody = Runtypes.Static<typeof GetRoomsBodyValidationType>;
-
-const validateEvent = (body: any): GetRoomsBody => {
-  return GetRoomsBodyValidationType.check(body);
-}
+import { validateGetRoomsResponse } from 'chat-types';
 
 export const handler = async (event: any, context: any) => { // eslint-disable-line no-unused-vars
   try {
     const rooms = await getRooms();
     return {
       statusCode: 200,
-      body: JSON.stringify({
+      body: JSON.stringify(validateGetRoomsResponse({
         rooms
-      }),
+      })),
       headers: {
         ...corsHeaders
       },

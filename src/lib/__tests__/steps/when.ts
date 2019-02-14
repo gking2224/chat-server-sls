@@ -1,9 +1,8 @@
 import getMessages from "../../get-messages";
 import getConnectionsByRoom from "../../get-connections-by-room";
-import { RoomName } from "chat-types";
 
-const we_invoke_get_messages = async (room: RoomName) => getMessages(room);
-const we_invoke_get_connections_by_room = async (room: RoomName) => getConnectionsByRoom(room);
+const we_invoke_get_messages = async (roomName: string) => getMessages(roomName);
+const we_invoke_get_connections_by_room = async (roomName: string) => getConnectionsByRoom(roomName);
 
 export default ({
   we_invoke_get_messages,

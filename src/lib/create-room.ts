@@ -1,14 +1,13 @@
 import EnvVariables from './env-variables';
 
 import { dynamodb } from '../lib/libs';
-import { RoomEntity } from '../model/domain/room';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import { RoomName } from 'chat-types';
+import { RoomEntity } from 'chat-types';
 
-export default async (room: RoomName): Promise<RoomEntity> => {
+export default async (roomName: string): Promise<RoomEntity> => {
 
   const Item: RoomEntity = {
-    room,
+    room: roomName,
   };
 
   const req: DocumentClient.PutItemInput = {

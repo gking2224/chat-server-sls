@@ -1,12 +1,21 @@
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import { dynamodb } from '../src/lib/libs';
+import envVariables from "../src/lib/env-variables";
+import { validateChatRoomMessageEntity, validateConnectionEntity, validateRoomEntity } from "chat-types";
 
-export const putItems = async (tableName: string, items: object[]) => {
+
+const entityValidators = {
+  [envVariables.MessagesTable]: validateChatRoomMessageEntity,
+  [envVariables.ConnectionsTable]: validateConnectionEntity,
+  [envVariables.RoomsTable]: validateRoomEntity,
+}
+
+export const putItems = async (tableName: string, items: object[], validate: boolean = true) => {
   const req: DocumentClient.BatchWriteItemInput = {
     RequestItems: {
-      [tableName]: items.map((Item) => ({
+      [tableName]: items.map((i) => ({
         PutRequest: {
-          Item
+          Item: validate ? entityValidators[tableName](i) : i
         }
       }))
     }

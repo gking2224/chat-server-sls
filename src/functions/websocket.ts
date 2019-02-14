@@ -2,8 +2,14 @@ import saveConnection from '../lib/save-connection';
 import deleteConnection from '../lib/delete-connection';
 import { ApiGatewayManagementApi } from 'aws-sdk';
 import { processMessage } from '../lib/process-message';
-import { ConnectionId } from 'aws-sdk/clients/directconnect';
-import { RoomName, Author } from 'chat-types';
+import {
+  validateWebsocketEventType,
+  validateWebsocketMessageRequestBody,
+  validateWebsocketConnectQueryParameters,
+  WebsocketConnectQueryParameters,
+  validateConnectionId,
+  ConnectionId
+} from 'chat-types';
 
 const sendError = async (agma: ApiGatewayManagementApi, connectionId: ConnectionId, error: any) =>
   agma.postToConnection({
@@ -11,9 +17,9 @@ const sendError = async (agma: ApiGatewayManagementApi, connectionId: Connection
     Data: JSON.stringify({ error }),
   }).promise();
 
-const initConnection = async (connectionId: ConnectionId, room: RoomName, author: Author) => {
-  console.log('initConnection', room, author);
-  return saveConnection(connectionId, room, author);
+const initConnection = async (connectionId: ConnectionId, qsp: WebsocketConnectQueryParameters) => {
+  console.log('initConnection', qsp);
+  return saveConnection(connectionId, qsp.room, qsp.author);
 }
 
 const onDisconnect = async (connectionId: ConnectionId) =>
@@ -21,30 +27,30 @@ const onDisconnect = async (connectionId: ConnectionId) =>
 
 export const handler = async (event: any) => {
   const {
-    eventType,
+    eventType: incomingEventType,
     connectionId,
     domainName,
     stage,
   } = event.requestContext;
   const { queryStringParameters } = event;
-  const { room, author } = (queryStringParameters || {}) as any;
 
   const agma = new ApiGatewayManagementApi({
     endpoint: `${domainName}/${stage}`,
   });
   try {
+    const eventType = validateWebsocketEventType(incomingEventType);
     switch (eventType) {
       case 'CONNECT':
-        await initConnection(connectionId, room, author);
+        await initConnection(
+          validateConnectionId(connectionId), validateWebsocketConnectQueryParameters(queryStringParameters));
         break;
       case 'DISCONNECT':
-        await onDisconnect(connectionId);
+        await onDisconnect(validateConnectionId(connectionId));
         break;
       case 'MESSAGE':
-        await processMessage(agma, connectionId, JSON.parse(event.body));
+        await processMessage(
+          agma, validateConnectionId(connectionId), validateWebsocketMessageRequestBody(event.body));
         break;
-      default:
-        console.error(`Unknown eventType: ${eventType}`);
     }
   } catch (e) {
     console.error(e);
