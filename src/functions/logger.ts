@@ -34,7 +34,6 @@ const logMessage = async (m: LogMessage) => {
 
 export const handler = async (event: any) => {
 
-  console.log(event);
   const {
     eventType,
     connectionId,
@@ -57,7 +56,7 @@ export const handler = async (event: any) => {
         console.log(`Disconnect: ${connectionId}`);
       case 'MESSAGE':
         const body = JSON.parse(event.body);
-        logMessage(validateLogMessage({ body, connectionId, sourceIp }));
+        logMessage(validateLogMessage({ ...body, connectionId, sourceIp }));
         break;
     }
   } catch (e) {
