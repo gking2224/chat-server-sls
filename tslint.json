@@ -15,7 +15,6 @@
     "curly": false,
     "no-console": false,
     "no-submodule-imports": false,
-    "no-implicit-dependencies": [true, ["chat-types"]],
     "trailing-comma": [
       true,
       {
