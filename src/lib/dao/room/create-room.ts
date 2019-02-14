@@ -1,7 +1,7 @@
 import EnvVariables from '../../env-variables';
 
+import { RoomEntity } from '@animando/chat-types';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import { RoomEntity } from 'chat-types';
 import { dynamodb } from '../../lib-wrappers';
 
 export default async (roomName: string): Promise<RoomEntity> => {

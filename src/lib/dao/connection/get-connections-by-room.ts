@@ -1,5 +1,5 @@
+import { ConnectionEntity, validateConnectionEntity } from '@animando/chat-types';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import { ConnectionEntity, validateConnectionEntity } from 'chat-types';
 import EnvVariables from '../../env-variables';
 import { dynamodb } from '../../lib-wrappers';
 import { doFilterByTypeValidation } from '../../utils/type-filter';

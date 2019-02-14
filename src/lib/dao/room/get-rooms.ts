@@ -1,5 +1,5 @@
+import { validateRoomEntity } from '@animando/chat-types';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import { validateRoomEntity } from 'chat-types';
 import envVariables from '../../env-variables';
 import { dynamodb } from '../../lib-wrappers';
 

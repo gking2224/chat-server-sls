@@ -1,4 +1,3 @@
-import { ApiGatewayManagementApi } from 'aws-sdk';
 import {
   ConnectionId,
   validateConnectionId,
@@ -6,7 +5,8 @@ import {
   validateWebsocketEventType,
   validateWebsocketMessageRequestBody,
   WebsocketConnectQueryParameters
-} from 'chat-types';
+} from '@animando/chat-types';
+import { ApiGatewayManagementApi } from 'aws-sdk';
 import deleteConnection from '../lib/dao/connection/delete-connection';
 import saveConnection from '../lib/dao/connection/save-connection';
 import { processMessage } from '../lib/websocket/process-message';

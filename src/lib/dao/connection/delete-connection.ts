@@ -1,7 +1,7 @@
 import EnvVariables from '../../env-variables';
 
+import { ConnectionId } from '@animando/chat-types';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import { ConnectionId } from 'chat-types';
 import { dynamodb } from '../../lib-wrappers';
 
 export default async (connectionId: ConnectionId) => {

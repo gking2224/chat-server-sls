@@ -1,5 +1,5 @@
+import { ConnectionId, WebsocketMessageResponse } from '@animando/chat-types';
 import { ApiGatewayManagementApi } from 'aws-sdk';
-import { ConnectionId, WebsocketMessageResponse } from 'chat-types';
 
 export const publishMessage =
   (agma: ApiGatewayManagementApi, connectionId: ConnectionId | ConnectionId[], message: WebsocketMessageResponse) => {

@@ -4,7 +4,7 @@ import generateRandomId from '../../utils/generate-random-id';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { dynamodb } from '../../lib-wrappers';
 
-import { ChatRoomMessageEntity, PublishNewMessage } from 'chat-types';
+import { ChatRoomMessageEntity, PublishNewMessage } from '@animando/chat-types';
 import getLanguage from '../../aws/get-language';
 import translateToEnglish from '../../aws/translate-to-english';
 

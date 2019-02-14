@@ -1,6 +1,6 @@
 import when from './steps/when';
 
-import { ConnectionEntity } from 'chat-types';
+import { ConnectionEntity } from '@animando/chat-types';
 import { deleteItems, putItems } from '../../../../../tests/data-helper';
 import envVariables from '../../../env-variables';
 

@@ -1,4 +1,4 @@
-import { validateGetRoomsResponse } from 'chat-types';
+import { validateGetRoomsResponse } from '@animando/chat-types';
 import getRooms from '../lib/dao/room/get-rooms';
 import { corsHeaders } from '../lib/utils/cors';
 

@@ -1,4 +1,4 @@
-import { CreateRoomBody, validateCreateRoomBody, validateCreateRoomResponse } from 'chat-types';
+import { CreateRoomBody, validateCreateRoomBody, validateCreateRoomResponse } from '@animando/chat-types';
 import createRoom from '../lib/dao/room/create-room';
 import { corsHeaders } from '../lib/utils/cors';
 

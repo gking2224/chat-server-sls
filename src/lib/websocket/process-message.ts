@@ -1,7 +1,7 @@
-import { ApiGatewayManagementApi } from 'aws-sdk';
 import {
   ChatRoomMessageEntity, ConnectionId, PublishNewMessage, RequestInitRoom, WebsocketMessageRequest
-} from 'chat-types';
+} from '@animando/chat-types';
+import { ApiGatewayManagementApi } from 'aws-sdk';
 import getConnectionsByRoom from '../dao/connection/get-connections-by-room';
 import getMessages from '../dao/message/get-messages';
 import saveMessage from '../dao/message/save-message';

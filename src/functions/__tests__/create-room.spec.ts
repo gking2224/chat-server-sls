@@ -1,4 +1,4 @@
-import { CreateRoomBody, validateCreateRoomResponse } from 'chat-types';
+import { CreateRoomBody, validateCreateRoomResponse } from '@animando/chat-types';
 import { expectErrorMessage } from '../../../tests/assertion-helpers';
 import init from './steps/init';
 import when from './steps/when';
@@ -13,7 +13,7 @@ describe('POST /create-room function', () => {
       roomName: 'testCreateRoom',
     };
     const event = { body: JSON.stringify(reqBody) };
-    const res = await when.we_invoke_create_room(event);
+    const res = await when.weInvokeCreateRoom(event);
     expect(res.statusCode).toEqual(200);
     const resBody = validateCreateRoomResponse(JSON.parse(res.body));
     expect(resBody.roomName).toEqual('testCreateRoom');
@@ -24,20 +24,20 @@ describe('POST /create-room function', () => {
       someOther: 'x',
     };
     const event = { body: JSON.stringify(reqBody) };
-    const res = await when.we_invoke_create_room(event);
+    const res = await when.weInvokeCreateRoom(event);
     expect(res.statusCode).toEqual(200);
     const resBody = validateCreateRoomResponse(JSON.parse(res.body));
     expect(resBody.roomName).toEqual('testCreateRoom2');
   });
   it('should handle invalid room type', async () => {
     const event = { body: JSON.stringify({ roomName: 2 }) };
-    const res = await when.we_invoke_create_room(event);
+    const res = await when.weInvokeCreateRoom(event);
     expect(res.statusCode).toEqual(500);
     expectErrorMessage(res).toEqual('Expected string, but was number');
   });
   it('should handle invalid input - no room', async () => {
     const event = { body: JSON.stringify({}) };
-    const res = await when.we_invoke_create_room(event);
+    const res = await when.weInvokeCreateRoom(event);
     expect(res.statusCode).toEqual(500);
     expectErrorMessage(res).toEqual('Expected string, but was undefined');
   });

@@ -1,6 +1,6 @@
 import EnvVariables from '../../env-variables';
 
-import { ConnectionEntity, ConnectionId } from 'chat-types';
+import { ConnectionEntity, ConnectionId } from '@animando/chat-types';
 import { dynamodb } from '../../lib-wrappers';
 
 export default async (connectionId: ConnectionId, room: string, author: string) => {

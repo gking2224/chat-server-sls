@@ -8,7 +8,7 @@ beforeAll(async () => {
 
 describe('GET /get-rooms function', () => {
   it('should return the rooms', async () => {
-    const res = await when.we_invoke_get_rooms({}, {});
+    const res = await when.weInvokeGetRooms({}, {});
     expect(res.statusCode).toEqual(200);
     const body = parseBody(res);
     expect(body.rooms).toBeInstanceOf(Array);

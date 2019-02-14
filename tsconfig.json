@@ -13,17 +13,9 @@
       "dom",
       "es2015",
       "esnext.asynciterable"
-    ],
-    "rootDirs": [
-      "../chat-types/lib",
-      "."
     ]
   },
   "exclude": [
     "node_modules"
-  ],
-  "include": [
-    "src/**/*.ts",
-    "../chat-types/lib/*.ts"
   ]
 }
