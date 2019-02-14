@@ -23,21 +23,27 @@ const LogMessageValidation = Record({
   logStream: String,
   message: String,
   severity: Severity,
+  sourceIp: String,
 });
 type LogMessage = Static<typeof LogMessageValidation>;
 const validateLogMessage = (m: any) => LogMessageValidation.check(m);
 
 const logMessage = async (m: LogMessage) => {
-  console.log(`${m.connectionId} ${m.logStream} ${m.severity.toUpperCase()}: ${m.message}`);
+  console.log(`${m.connectionId} ${m.sourceIp} ${m.logStream} ${m.severity.toUpperCase()}: ${m.message}`);
 };
 
 export const handler = async (event: any) => {
+
+  console.log(event);
   const {
     eventType,
     connectionId,
     domainName,
     stage,
+    identity,
   } = event.requestContext;
+
+  const sourceIp = (identity) ? identity.sourceIp : '<UNKNOWN IP>';
 
   const agma = new ApiGatewayManagementApi({
     endpoint: `${domainName}/${stage}`,
@@ -51,8 +57,7 @@ export const handler = async (event: any) => {
         console.log(`Disconnect: ${connectionId}`);
       case 'MESSAGE':
         const body = JSON.parse(event.body);
-        const { action, ...rest } = body;
-        logMessage(validateLogMessage({ ...rest, connectionId }));
+        logMessage(validateLogMessage({ body, connectionId, sourceIp }));
         break;
     }
   } catch (e) {
