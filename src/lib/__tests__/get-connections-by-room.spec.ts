@@ -21,15 +21,20 @@ describe('get-connections-by-room', () => {
   const negativeMatch: ConnectionEntity = {
     connectionId: 'connectionId2',
     room: 'anotherRoom',
-    author: 'gk'
+    author: 'gk',
   };
+  const invalidMatch = {
+    connectionId: 'invalidConnection',
+    room
+  };
+  const allItems = [positiveMatch, negativeMatch, invalidMatch];
   beforeAll(async () => {
-    return putItems(envVariables.ConnectionsTable, [positiveMatch, negativeMatch]);
+    return putItems(envVariables.ConnectionsTable, allItems, false);
   });
   afterAll(async () => {
-    return deleteItems(envVariables.ConnectionsTable, 'connectionId', [positiveMatch, negativeMatch].map(i => i.connectionId));
+    return deleteItems(envVariables.ConnectionsTable, 'connectionId', allItems.map(i => i.connectionId));
   });
-  it('should return the connections for the given room', async () => {
+  it('should return the connections for the given room, excluding invalid', async () => {
     const connections = await when.we_invoke_get_connections_by_room(room);
     expect(connections).toEqual([positiveMatch]);
   })

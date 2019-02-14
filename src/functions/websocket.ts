@@ -1,7 +1,7 @@
-import saveConnection from '../lib/save-connection';
-import deleteConnection from '../lib/delete-connection';
+import saveConnection from '../lib/dao/connection/save-connection';
+import deleteConnection from '../lib/dao/connection/delete-connection';
 import { ApiGatewayManagementApi } from 'aws-sdk';
-import { processMessage } from '../lib/process-message';
+import { processMessage } from '../lib/websocket/process-message';
 import {
   validateWebsocketEventType,
   validateWebsocketMessageRequestBody,

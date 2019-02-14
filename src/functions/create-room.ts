@@ -1,5 +1,5 @@
-import createRoom from '../lib/create-room';
-import { corsHeaders } from '../lib/cors';
+import createRoom from '../lib/dao/room/create-room';
+import { corsHeaders } from '../lib/utils/cors';
 import { validateCreateRoomBody, validateCreateRoomResponse, CreateRoomBody } from 'chat-types';
 
 export const handler = async (event: any = {}) => {

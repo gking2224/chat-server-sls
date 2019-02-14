@@ -1,6 +1,6 @@
-import EnvVariables from './env-variables';
+import EnvVariables from '../../env-variables';
 
-import { dynamodb } from './libs';
+import { dynamodb } from '../../lib-wrappers';
 import { ConnectionId, ConnectionEntity } from 'chat-types';
 
 export default async (connectionId: ConnectionId, room: string, author: string) => {

@@ -1,5 +1,5 @@
-import getRooms from '../lib/get-rooms';
-import { corsHeaders } from '../lib/cors';
+import getRooms from '../lib/dao/room/get-rooms';
+import { corsHeaders } from '../lib/utils/cors';
 import { validateGetRoomsResponse } from 'chat-types';
 
 export const handler = async (event: any, context: any) => { // eslint-disable-line no-unused-vars

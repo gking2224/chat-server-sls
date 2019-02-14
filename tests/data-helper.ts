@@ -1,5 +1,5 @@
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
-import { dynamodb } from '../src/lib/libs';
+import { dynamodb } from '../src/lib/lib-wrappers';
 import envVariables from "../src/lib/env-variables";
 import { validateChatRoomMessageEntity, validateConnectionEntity, validateRoomEntity } from "chat-types";
 

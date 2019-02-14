@@ -1,4 +1,4 @@
-import envVariables from "./env-variables";
+import envVariables from "../env-variables";
 
 export const corsHeaders = {
   'Access-Control-Allow-Origin': '*',

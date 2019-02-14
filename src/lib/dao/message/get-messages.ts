@@ -1,8 +1,8 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import EnvVariables from './env-variables';
-import { dynamodb } from './libs';
+import EnvVariables from '../../env-variables';
+import { dynamodb } from '../../lib-wrappers';
 import { ChatRoomMessageEntity, validateChatRoomMessageEntity, } from 'chat-types';
-import { doFilterByTypeValidation } from './utils/type-filter';
+import { doFilterByTypeValidation } from '../../utils/type-filter';
 
 export default async (roomName: string): Promise<ChatRoomMessageEntity[]> => {
   const req: DocumentClient.QueryInput = {

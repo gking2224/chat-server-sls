@@ -1,11 +1,11 @@
-import envVariables from "./env-variables";
-import generateRandomId from './utils/generate-random-id';
+import envVariables from "../../env-variables";
+import generateRandomId from '../../utils/generate-random-id';
 
-import { dynamodb } from './libs';
+import { dynamodb } from '../../lib-wrappers';
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
-import getLanguage from '../lib/get-language';
-import translateToEnglish from '../lib/translate-to-english';
+import getLanguage from '../../aws/get-language';
+import translateToEnglish from '../../aws/translate-to-english';
 import { ChatRoomMessageEntity, PublishNewMessage } from "chat-types";
 
 export default async (event: PublishNewMessage): Promise<ChatRoomMessageEntity> => {

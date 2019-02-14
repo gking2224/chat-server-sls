@@ -1,5 +1,3 @@
-
-
 export const doFilterByTypeValidation = <T>(validationFunc: (a: any) => T) => (resp: any[]): T[] => {
   const filterFunc = <(x: any) => x is T>((x) => {
     try {

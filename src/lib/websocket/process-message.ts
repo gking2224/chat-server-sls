@@ -1,6 +1,6 @@
-import saveMessage from './save-message';
-import getMessages from './get-messages';
-import getConnectionsByRoom from "./get-connections-by-room";
+import saveMessage from '../dao/message/save-message';
+import getMessages from '../dao/message/get-messages';
+import getConnectionsByRoom from "../dao/connection/get-connections-by-room";
 import { publishMessage } from "./publish-to-websocket";
 import { ApiGatewayManagementApi } from 'aws-sdk';
 import { ConnectionId, ChatRoomMessageEntity, WebsocketMessageRequest, RequestInitRoom, PublishNewMessage } from 'chat-types';

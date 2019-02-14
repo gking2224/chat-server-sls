@@ -1,7 +1,8 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import EnvVariables from './env-variables';
-import { dynamodb } from './libs';
+import EnvVariables from '../../env-variables';
+import { dynamodb } from '../../lib-wrappers';
 import { ConnectionEntity, validateConnectionEntity } from 'chat-types';
+import { doFilterByTypeValidation } from '../../utils/type-filter';
 
 export default async (roomName: string): Promise<ConnectionEntity[]> => {
   const req: DocumentClient.QueryInput = {
@@ -15,5 +16,5 @@ export default async (roomName: string): Promise<ConnectionEntity[]> => {
   return dynamodb.query(req).promise()
     .then((r) => r.Items)
     .then((items) => items || [])
-    .then((items) => items.map((i: any) => validateConnectionEntity(i)));
+    .then(doFilterByTypeValidation<ConnectionEntity>(validateConnectionEntity));
 };

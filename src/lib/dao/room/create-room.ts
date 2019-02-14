@@ -1,6 +1,6 @@
-import EnvVariables from './env-variables';
+import EnvVariables from '../../env-variables';
 
-import { dynamodb } from '../lib/libs';
+import { dynamodb } from '../../lib-wrappers';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { RoomEntity } from 'chat-types';
 

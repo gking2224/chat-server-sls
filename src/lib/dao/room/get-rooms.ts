@@ -1,6 +1,6 @@
-import { dynamodb } from './libs';
+import { dynamodb } from '../../lib-wrappers';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import envVariables from './env-variables';
+import envVariables from '../../env-variables';
 import { validateRoomEntity } from 'chat-types';
 
 export default async () => {
