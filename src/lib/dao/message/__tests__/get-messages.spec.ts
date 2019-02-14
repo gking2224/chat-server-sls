@@ -1,15 +1,8 @@
 import when from './steps/when';
-import init from './steps/init';
 
-import envVariables from '../env-variables';
-import { putItems, deleteItems } from '../../../tests/data-helper';
+import envVariables from '../../../env-variables';
+import { putItems, deleteItems } from '../../../../../tests/data-helper';
 import { ChatRoomMessageEntity } from 'chat-types';
-
-beforeAll(async () => {
-  await init();
-});
-
-jest.setTimeout(10000);
 
 describe('get-messages', () => {
   const room = 'testRoom';
