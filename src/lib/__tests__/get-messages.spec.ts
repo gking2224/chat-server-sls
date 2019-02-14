@@ -29,14 +29,37 @@ describe('get-messages', () => {
     author: 'gk',
     translation: null
   };
+  const noTranslation = {
+    messageId: 'message3',
+    message: "Test message - no translation",
+    room: 'room3',
+    language: 'en',
+    author: 'gk',
+  };
+  const invalidMessage = {
+    messageId: 'invalidMessageWithValidPeer',
+    room: 'invalidMessageRoom'
+  };
+  const validMessage = {
+    messageId: 'validMessageWithInvalidPeer',
+    message: "Some message",
+    room: 'invalidMessageRoom',
+    language: 'en',
+    author: 'gk'
+  };
+  const allData = [positiveMatch, negativeMatch, noTranslation, invalidMessage, validMessage];
   beforeAll(async () => {
-    return putItems(envVariables.MessagesTable, [positiveMatch, negativeMatch], false)
+    return putItems(envVariables.MessagesTable, allData, false)
   });
   afterAll(async () => {
-    return deleteItems(envVariables.MessagesTable, 'messageId', [positiveMatch, negativeMatch].map(i => i.messageId));
+    return deleteItems(envVariables.MessagesTable, 'messageId', allData.map(i => i.messageId));
   });
   it('should return the messages for the given room', async () => {
     const messages = await when.we_invoke_get_messages(room);
     expect(messages).toEqual([positiveMatch]);
+  })
+  it('should fail validation if invalid message in db', async () => {
+    const messages = await when.we_invoke_get_messages("invalidMessageRoom")
+    expect(messages.length).toBe(1);
   })
 })

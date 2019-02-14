@@ -1,5 +1,5 @@
 import envVariables from "./env-variables";
-import generateRandomId from '../lib/generate-random-id';
+import generateRandomId from './utils/generate-random-id';
 
 import { dynamodb } from './libs';
 import { DocumentClient } from "aws-sdk/clients/dynamodb";

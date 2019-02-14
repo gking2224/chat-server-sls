@@ -24,6 +24,6 @@
   ],
   "include": [
     "src/**/*.ts",
-    "../chat-types/lib/*.d.ts"
+    "../chat-types/lib/*.ts"
   ]
 }

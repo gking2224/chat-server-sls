@@ -2,6 +2,7 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import EnvVariables from './env-variables';
 import { dynamodb } from './libs';
 import { ChatRoomMessageEntity, validateChatRoomMessageEntity, } from 'chat-types';
+import { doFilterByTypeValidation } from './utils/type-filter';
 
 export default async (roomName: string): Promise<ChatRoomMessageEntity[]> => {
   const req: DocumentClient.QueryInput = {
@@ -14,5 +15,5 @@ export default async (roomName: string): Promise<ChatRoomMessageEntity[]> => {
   };
   return await dynamodb.query(req).promise()
     .then((resp) => resp.Items || [])
-    .then((rr) => rr.map((r) => validateChatRoomMessageEntity(r)));
+    .then(doFilterByTypeValidation<ChatRoomMessageEntity>(validateChatRoomMessageEntity));
 };
