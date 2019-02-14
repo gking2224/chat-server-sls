@@ -1,15 +1,15 @@
-import saveConnection from '../lib/dao/connection/save-connection';
-import deleteConnection from '../lib/dao/connection/delete-connection';
 import { ApiGatewayManagementApi } from 'aws-sdk';
-import { processMessage } from '../lib/websocket/process-message';
 import {
+  ConnectionId,
+  validateConnectionId,
+  validateWebsocketConnectQueryParameters,
   validateWebsocketEventType,
   validateWebsocketMessageRequestBody,
-  validateWebsocketConnectQueryParameters,
-  WebsocketConnectQueryParameters,
-  validateConnectionId,
-  ConnectionId
+  WebsocketConnectQueryParameters
 } from 'chat-types';
+import deleteConnection from '../lib/dao/connection/delete-connection';
+import saveConnection from '../lib/dao/connection/save-connection';
+import { processMessage } from '../lib/websocket/process-message';
 
 const sendError = async (agma: ApiGatewayManagementApi, connectionId: ConnectionId, error: any) =>
   agma.postToConnection({
@@ -20,7 +20,7 @@ const sendError = async (agma: ApiGatewayManagementApi, connectionId: Connection
 const initConnection = async (connectionId: ConnectionId, qsp: WebsocketConnectQueryParameters) => {
   console.log('initConnection', qsp);
   return saveConnection(connectionId, qsp.room, qsp.author);
-}
+};
 
 const onDisconnect = async (connectionId: ConnectionId) =>
   deleteConnection(connectionId);

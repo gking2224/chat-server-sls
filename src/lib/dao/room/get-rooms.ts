@@ -1,12 +1,12 @@
-import { dynamodb } from '../../lib-wrappers';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import envVariables from '../../env-variables';
 import { validateRoomEntity } from 'chat-types';
+import envVariables from '../../env-variables';
+import { dynamodb } from '../../lib-wrappers';
 
 export default async () => {
   const req: DocumentClient.ScanInput = {
-    TableName: envVariables.RoomsTable,
     Limit: 100,
+    TableName: envVariables.RoomsTable,
   };
   return dynamodb.scan(req).promise()
     .then((resp) => resp.Items ? resp.Items : [])

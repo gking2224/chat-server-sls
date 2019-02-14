@@ -1,9 +1,9 @@
-import { ApiGatewayManagementApi } from "aws-sdk";
-import { WebsocketMessageResponse, ConnectionId } from "chat-types";
+import { ApiGatewayManagementApi } from 'aws-sdk';
+import { ConnectionId, WebsocketMessageResponse } from 'chat-types';
 
 export const publishMessage =
   (agma: ApiGatewayManagementApi, connectionId: ConnectionId | ConnectionId[], message: WebsocketMessageResponse) => {
-    let connectionIds = Array.isArray(connectionId) ? connectionId : [connectionId];
+    const connectionIds = Array.isArray(connectionId) ? connectionId : [connectionId];
     const payload = JSON.stringify(message);
     return Promise.all(connectionIds.map((c) => {
       return agma.postToConnection({
@@ -11,4 +11,4 @@ export const publishMessage =
         Data: payload,
       }).promise();
     }));
-  }
+  };

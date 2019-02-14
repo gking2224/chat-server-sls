@@ -1,41 +1,44 @@
-import saveMessage from '../dao/message/save-message';
-import getMessages from '../dao/message/get-messages';
-import getConnectionsByRoom from "../dao/connection/get-connections-by-room";
-import { publishMessage } from "./publish-to-websocket";
 import { ApiGatewayManagementApi } from 'aws-sdk';
-import { ConnectionId, ChatRoomMessageEntity, WebsocketMessageRequest, RequestInitRoom, PublishNewMessage } from 'chat-types';
+import {
+  ChatRoomMessageEntity, ConnectionId, PublishNewMessage, RequestInitRoom, WebsocketMessageRequest
+} from 'chat-types';
+import getConnectionsByRoom from '../dao/connection/get-connections-by-room';
+import getMessages from '../dao/message/get-messages';
+import saveMessage from '../dao/message/save-message';
+import { publishMessage } from './publish-to-websocket';
 
-const sendAllRoomMessages = async (ApiGatewayManagementApi: ApiGatewayManagementApi, connectionId: ConnectionId, messages: ChatRoomMessageEntity[]) => {
-  await publishMessage(ApiGatewayManagementApi, connectionId, { action: 'init', messages });
+const sendAllRoomMessages = async (
+  agma: ApiGatewayManagementApi, connectionId: ConnectionId, messages: ChatRoomMessageEntity[]) => {
+  await publishMessage(agma, connectionId, { action: 'init', messages });
 };
 
-const sendMessageToRoom = async (ApiGatewayManagementApi: ApiGatewayManagementApi, message: ChatRoomMessageEntity) => {
+const sendMessageToRoom = async (agma: ApiGatewayManagementApi, message: ChatRoomMessageEntity) => {
   const connectionIds = await getConnectionsByRoom(message.room)
-    .then((c) => c.map((c) => c.connectionId));
-  await publishMessage(ApiGatewayManagementApi, connectionIds, { action: 'message', message });
-}
+    .then((cc) => cc.map((c) => c.connectionId));
+  await publishMessage(agma, connectionIds, { action: 'message', message });
+};
 
 const onInitialiseConnection = async (
-  ApiGatewayManagementApi: ApiGatewayManagementApi, connectionId: ConnectionId, message: RequestInitRoom
+  agma: ApiGatewayManagementApi, connectionId: ConnectionId, message: RequestInitRoom,
 ) => {
   const messages = await getMessages(message.roomName);
-  await sendAllRoomMessages(ApiGatewayManagementApi, connectionId, messages);
+  await sendAllRoomMessages(agma, connectionId, messages);
 };
 
-const onMessageReceived = async (ApiGatewayManagementApi: ApiGatewayManagementApi, message: PublishNewMessage) => {
+const onMessageReceived = async (agma: ApiGatewayManagementApi, message: PublishNewMessage) => {
   const saved = await saveMessage(message);
-  await sendMessageToRoom(ApiGatewayManagementApi, saved);
+  await sendMessageToRoom(agma, saved);
 };
 
 export const processMessage = async (
-  ApiGatewayManagementApi: ApiGatewayManagementApi, connectionId: ConnectionId, body: WebsocketMessageRequest
+  agma: ApiGatewayManagementApi, connectionId: ConnectionId, body: WebsocketMessageRequest,
 ) => {
   switch (body.action) {
     case 'init':
-      await onInitialiseConnection(ApiGatewayManagementApi, connectionId, body);
+      await onInitialiseConnection(agma, connectionId, body);
       break;
     case 'message':
-      await onMessageReceived(ApiGatewayManagementApi, body);
+      await onMessageReceived(agma, body);
       break;
     default:
   }

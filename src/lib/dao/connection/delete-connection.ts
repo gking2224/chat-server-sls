@@ -1,14 +1,14 @@
 import EnvVariables from '../../env-variables';
 
-import { dynamodb } from '../../lib-wrappers';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { ConnectionId } from 'chat-types';
+import { dynamodb } from '../../lib-wrappers';
 
 export default async (connectionId: ConnectionId) => {
   console.log('delete connection', connectionId);
   const req: DocumentClient.DeleteItemInput = {
     Key: ({
-      connectionId
+      connectionId,
     }),
     TableName: EnvVariables.ConnectionsTable,
   };

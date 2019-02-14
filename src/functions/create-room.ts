@@ -1,6 +1,6 @@
+import { CreateRoomBody, validateCreateRoomBody, validateCreateRoomResponse } from 'chat-types';
 import createRoom from '../lib/dao/room/create-room';
 import { corsHeaders } from '../lib/utils/cors';
-import { validateCreateRoomBody, validateCreateRoomResponse, CreateRoomBody } from 'chat-types';
 
 export const handler = async (event: any = {}) => {
   try {
@@ -8,22 +8,22 @@ export const handler = async (event: any = {}) => {
     const body: CreateRoomBody = validateCreateRoomBody(event.body);
     const response = await createRoom(body.roomName);
     return {
-      statusCode: 200,
       body: JSON.stringify(validateCreateRoomResponse({ roomName: response.room })),
       headers: {
-        ...corsHeaders
+        ...corsHeaders,
       },
+      statusCode: 200,
     };
   } catch (e) {
     return {
-      statusCode: 500,
       body: JSON.stringify({
-        message: e.message,
         error: e,
+        message: e.message,
       }),
       headers: {
-        ...corsHeaders
+        ...corsHeaders,
       },
+      statusCode: 500,
     };
   }
 };

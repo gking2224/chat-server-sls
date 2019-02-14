@@ -1,12 +1,12 @@
-import envVariables from "../../env-variables";
+import envVariables from '../../env-variables';
 import generateRandomId from '../../utils/generate-random-id';
 
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { dynamodb } from '../../lib-wrappers';
-import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
+import { ChatRoomMessageEntity, PublishNewMessage } from 'chat-types';
 import getLanguage from '../../aws/get-language';
 import translateToEnglish from '../../aws/translate-to-english';
-import { ChatRoomMessageEntity, PublishNewMessage } from "chat-types";
 
 export default async (event: PublishNewMessage): Promise<ChatRoomMessageEntity> => {
   const { message } = event;
@@ -14,12 +14,12 @@ export default async (event: PublishNewMessage): Promise<ChatRoomMessageEntity> 
   const language = await getLanguage(text);
 
   const Item: ChatRoomMessageEntity = {
-    message: text,
-    room,
     author,
-    messageId: generateRandomId(),
     language,
-    translation: null
+    message: text,
+    messageId: generateRandomId(),
+    room,
+    translation: null,
   };
 
   if (language !== 'en') {
@@ -27,8 +27,8 @@ export default async (event: PublishNewMessage): Promise<ChatRoomMessageEntity> 
     Item.translation = translation;
   }
   const req: DocumentClient.PutItemInput = {
-    TableName: envVariables.MessagesTable,
     Item,
+    TableName: envVariables.MessagesTable,
   };
   await dynamodb.put(req).promise();
   return Item;

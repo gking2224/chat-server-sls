@@ -1,34 +1,34 @@
 import when from './steps/when';
 
-import envVariables from '../../../env-variables';
-import { putItems, deleteItems } from '../../../../../tests/data-helper';
 import { ConnectionEntity } from 'chat-types';
+import { deleteItems, putItems } from '../../../../../tests/data-helper';
+import envVariables from '../../../env-variables';
 
 describe('get-connections-by-room', () => {
   const room = 'testRoom';
   const positiveMatch = {
+    author: 'gk',
     connectionId: 'connectionId1',
     room,
-    author: 'gk'
   };
   const negativeMatch: ConnectionEntity = {
+    author: 'gk',
     connectionId: 'connectionId2',
     room: 'anotherRoom',
-    author: 'gk',
   };
   const invalidMatch = {
     connectionId: 'invalidConnection',
-    room
+    room,
   };
   const allItems = [positiveMatch, negativeMatch, invalidMatch];
   beforeAll(async () => {
     return putItems(envVariables.ConnectionsTable, allItems, false);
   });
   afterAll(async () => {
-    return deleteItems(envVariables.ConnectionsTable, 'connectionId', allItems.map(i => i.connectionId));
+    return deleteItems(envVariables.ConnectionsTable, 'connectionId', allItems.map((i) => i.connectionId));
   });
   it('should return the connections for the given room, excluding invalid', async () => {
-    const connections = await when.we_invoke_get_connections_by_room(room);
+    const connections = await when.weInvokeGetConnectionsByRoom(room);
     expect(connections).toEqual([positiveMatch]);
-  })
-})
+  });
+});

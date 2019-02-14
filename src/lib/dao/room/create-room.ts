@@ -1,8 +1,8 @@
 import EnvVariables from '../../env-variables';
 
-import { dynamodb } from '../../lib-wrappers';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { RoomEntity } from 'chat-types';
+import { dynamodb } from '../../lib-wrappers';
 
 export default async (roomName: string): Promise<RoomEntity> => {
 
@@ -11,8 +11,8 @@ export default async (roomName: string): Promise<RoomEntity> => {
   };
 
   const req: DocumentClient.PutItemInput = {
-    TableName: EnvVariables.RoomsTable,
     Item,
+    TableName: EnvVariables.RoomsTable,
   };
   await dynamodb.put(req).promise();
   return Item;
