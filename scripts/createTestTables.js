@@ -1,52 +1,32 @@
 #!/usr/bin/env node
-
-const AWS = require('aws-sdk');
-
-const dynamodb = new AWS.DynamoDB({
-  endpoint: process.env.DYNAMO_DB_ENDPOINT,
-});
-
-const roomsTableName = process.env.ROOMS_TABLE || 'test_rooms';
+const { dynamodb } = require('../config/lib');
+const { roomsSpec, messagesSpec, connectionsSpec } = require('../config/table-specs');
 
 const createTable = async (params) => {
-  console.log(`Create table ${params.TableName} at ${process.env.DYNAMO_DB_ENDPOINT}`);
+  console.log(dynamodb.endpoint);
   return dynamodb.createTable(params).promise()
-    .then((res) => {
-      console.log(`Created '${params.TableName}' table: ${res}`);
-      return res;
-    })
+    .then(() => console.log(`Created '${params.TableName}' table`))
     .catch((e) => {
-      if (e.code === 'Cannot create preexisting table') {
+      if (e.code === 'ResourceInUseException') {
         console.warn(`Table already exists: ${params.TableName}`);
+      } else {
+        throw e;
       }
-      console.log(e);
     });
 };
-const createRoomsTable = async () => {
-  const params = {
-    TableName: roomsTableName,
-    AttributeDefinitions: [
-      {
-        AttributeName: 'room',
-        AttributeType: 'S',
-      },
-    ],
-    KeySchema: [
-      {
-        AttributeName: 'room',
-        KeyType: 'HASH',
-      },
-    ],
-    ProvisionedThroughput: {
-      ReadCapacityUnits: 1,
-      WriteCapacityUnits: 1,
-    },
-  };
-  return createTable(params);
-};
-createRoomsTable()
-  .then((res) => {
-    console.log(`Complete: ${res}`);
+const createRoomsTable = async () => createTable(roomsSpec);
+const createMessagesTable = async () => createTable(messagesSpec);
+const createConnectionsTable = async () => createTable(connectionsSpec);
+
+const doCreate = async () => Promise.all([
+  createMessagesTable(),
+  createRoomsTable(),
+  createConnectionsTable(),
+]);
+
+doCreate()
+  .then(() => {
+    console.log('Complete');
   })
   .catch((e) => {
     console.error(e);

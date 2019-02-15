@@ -1,5 +1,5 @@
 
-const { dynamodb } = require('./lib');
+const { dynamodb } = require('../lib');
 
 const deleteTable = async (tableName) => {
   const params = {

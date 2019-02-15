@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "offline": "node -r ./config/setup-offline.js ./node_modules/.bin/sls offline",
     "deploy": "node -r dotenv-safe/config ./node_modules/.bin/sls deploy",
     "invoke-local": "node -r dotenv-safe/config ./node_modules/.bin/sls invoke local -f",
     "test": "node -r ./config/tests/test-require.js ./node_modules/.bin/jest --config ./jest.config.json",
+    "createTestTables": "node -r ./config/setup-offline.js scripts/createTestTables.js",
     "lint:fix": "yarn run lint --fix",
     "lint": "tslint -p ."
   },
@@ -36,6 +38,7 @@
     "eslint-plugin-import": "^2.16.0",
     "jest": "<23",
     "serverless": "^1.37.1",
+    "serverless-offline": "^4.4.2",
     "serverless-plugin-typescript": "^1.1.5",
     "serverless-plugin-webpack": "^1.5.1",
     "serverless-webpack": "^5.2.0",

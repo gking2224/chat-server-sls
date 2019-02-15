@@ -10,10 +10,13 @@ custom:
     dynamo_db_endpoint: ${env:DYNAMO_DB_ENDPOINT, ''}
     ws_api_gateway_id: ${env:WS_API_GATEWAY_ID}
     ws_logger_api_gateway_id: ${env:WS_LOGGER_API_GATEWAY_ID}
+  serverless-offline:
+    port: 4000
 
 plugins:
   - serverless-webpack
   - serverless-pseudo-parameters
+  - serverless-offline
 
 provider:
   name: aws

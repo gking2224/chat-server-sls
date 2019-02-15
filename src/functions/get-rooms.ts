@@ -4,6 +4,7 @@ import { corsHeaders } from '../lib/utils/cors';
 
 export const handler = async (event: any, context: any) => { // eslint-disable-line no-unused-vars
   try {
+    console.log(event);
     const rooms = await getRooms();
     return {
       body: JSON.stringify(validateGetRoomsResponse({
