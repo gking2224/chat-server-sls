@@ -2,34 +2,26 @@ import {
   ConnectionId,
   validateConnectionId,
 } from '@animando/chat-types';
+import { LogMessage, LogMessageValidation, validateLogMessage } from '@animando/cloud-app-logging';
 import { ApiGatewayManagementApi } from 'aws-sdk';
-import { Literal, Record, Static, String, Union } from 'runtypes';
+import { Record, Static, String, Union } from 'runtypes';
 
 const sendError = async (agma: ApiGatewayManagementApi, connectionId: ConnectionId, error: any) =>
   agma.postToConnection({
     ConnectionId: connectionId,
     Data: JSON.stringify({ error }),
   }).promise();
-const Severity = Union(
-  Literal('debug'),
-  Literal('error'),
-  Literal('warn'),
-  Literal('trace'),
-  Literal('fatal'),
-  Literal('info'),
-);
-const LogMessageValidation = Record({
+const EnrichedLogMessageValidation = Record({
   connectionId: String,
-  logStream: String,
-  message: String,
-  severity: Severity,
+  message: LogMessageValidation,
   sourceIp: String,
 });
-type LogMessage = Static<typeof LogMessageValidation>;
-const validateLogMessage = (m: any) => LogMessageValidation.check(m);
+type EnrichedLogMessage = Static<typeof EnrichedLogMessageValidation>;
+const validateEnrichedLogMessage = (m: any) => EnrichedLogMessageValidation.check(m);
 
-const logMessage = async (m: LogMessage) => {
-  console.log(`${m.connectionId} ${m.sourceIp} ${m.logStream} ${m.severity.toUpperCase()}: ${m.message}`);
+const logMessage = async (m: EnrichedLogMessage) => {
+  // tslint:disable-next-line:max-line-length
+  console.log(`${m.connectionId} ${m.sourceIp} ${m.message.application} ${m.message.severity.toUpperCase()}: ${m.message.message}`);
 };
 
 export const handler = async (event: any) => {
@@ -56,7 +48,7 @@ export const handler = async (event: any) => {
         console.log(`Disconnect: ${connectionId}`);
       case 'MESSAGE':
         const body = JSON.parse(event.body);
-        logMessage(validateLogMessage({ ...body, connectionId, sourceIp }));
+        logMessage(validateEnrichedLogMessage({ message: validateLogMessage(body), connectionId, sourceIp }));
         break;
     }
   } catch (e) {
