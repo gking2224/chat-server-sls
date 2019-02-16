@@ -46,6 +46,7 @@ export const handler = async (event: any) => {
         break;
       case 'DISCONNECT':
         console.log(`Disconnect: ${connectionId}`);
+        break;
       case 'MESSAGE':
         const body = JSON.parse(event.body);
         logMessage(validateEnrichedLogMessage({ message: validateLogMessage(body), connectionId, sourceIp }));
