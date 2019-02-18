@@ -19,11 +19,16 @@ const pickLanguage = (res: DetectDominantLanguageResponse): string => {
   const chosen: ScoredLanguage = res.Languages.reduce<ScoredLanguage>(dominantLanguageReducer, start);
   return chosen.LanguageCode;
 };
+const useDefaultOnError = (e: any) => {
+  console.error(e);
+  return 'en';
+};
 
 export default async (text: string) => {
   console.log(`Get Language: ${text}`);
   return comprehend.detectDominantLanguage({
     Text: text,
   }).promise()
-    .then(pickLanguage);
+    .then(pickLanguage)
+    .catch(useDefaultOnError);
 };
