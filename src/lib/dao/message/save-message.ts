@@ -19,6 +19,7 @@ export default async (event: PublishNewMessage): Promise<ChatRoomMessageEntity> 
     message: text,
     messageId: generateRandomId(),
     room,
+    timestamp: new Date().getDate(),
     translation: null,
   };
 

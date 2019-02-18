@@ -12,6 +12,7 @@ describe('get-messages', () => {
     message: 'Test message - positive',
     messageId: 'message1',
     room,
+    timestamp: 1,
     translation: null,
   };
   const negativeMatch: ChatRoomMessageEntity = {
@@ -20,6 +21,7 @@ describe('get-messages', () => {
     message: 'Test message - negative',
     messageId: 'message2',
     room: 'anotherRoom',
+    timestamp: 1,
     translation: null,
   };
   const noTranslation = {
@@ -28,6 +30,13 @@ describe('get-messages', () => {
     message: 'Test message - no translation',
     messageId: 'message3',
     room: 'room3',
+  };
+  const noTimestamp = {
+    author: 'gk',
+    language: 'en',
+    message: 'Test message - no timestamp',
+    messageId: 'noTimestamp',
+    room: 'noTimestamp',
   };
   const invalidMessage = {
     messageId: 'invalidMessageWithValidPeer',
@@ -40,7 +49,7 @@ describe('get-messages', () => {
     messageId: 'validMessageWithInvalidPeer',
     room: 'invalidMessageRoom',
   };
-  const allData = [positiveMatch, negativeMatch, noTranslation, invalidMessage, validMessage];
+  const allData = [positiveMatch, negativeMatch, noTranslation, invalidMessage, validMessage, noTimestamp];
 
   beforeAll(async () => {
     return putItems(envVariables.MessagesTable, allData, false);
@@ -57,5 +66,10 @@ describe('get-messages', () => {
   it('should fail validation if invalid message in db', async () => {
     const messages = await when.weInvokeGetMessages('invalidMessageRoom');
     expect(messages.length).toBe(1);
+  });
+  it('should fail write default timestamp', async () => {
+    const messages = await when.weInvokeGetMessages('noTimestamp');
+    expect(messages.length).toBe(1);
+    expect(messages[0].timestamp).toBe(-1);
   });
 });

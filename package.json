@@ -15,8 +15,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@animando/chat-types": "^1.0.2",
-    "@animando/cloud-app-logging": "^1.0.7",
+    "@animando/chat-types": "^1.0.3",
+    "@animando/cloud-app-logging": "^1.0.11",
     "@types/uuid": "^3.4.4",
     "aws-sdk": "^2.398.0",
     "runtypes": "^3.1.2",

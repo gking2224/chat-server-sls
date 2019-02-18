@@ -4,6 +4,16 @@ import EnvVariables from '../../env-variables';
 import { dynamodb } from '../../lib-wrappers';
 import { doFilterByTypeValidation } from '../../utils/type-filter';
 
+const addDefaultTimestamp = (e: any) => {
+  if (e && e.timestamp === undefined) {
+    return {
+      ...e,
+      timestamp: -1,
+    };
+  }
+  return e;
+};
+
 export default async (roomName: string): Promise<ChatRoomMessageEntity[]> => {
   const req: DocumentClient.QueryInput = {
     ExpressionAttributeValues: {
@@ -15,5 +25,6 @@ export default async (roomName: string): Promise<ChatRoomMessageEntity[]> => {
   };
   return dynamodb.query(req).promise()
     .then((resp) => resp.Items || [])
+    .then((items) => items.map(addDefaultTimestamp))
     .then(doFilterByTypeValidation<ChatRoomMessageEntity>(validateChatRoomMessageEntity));
 };
