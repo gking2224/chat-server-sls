@@ -62,9 +62,9 @@ functions:
 
 resources:
   Resources: !!import/merge [
-    './messages-table.yml',
-    './connections-table.yml',
-    './rooms-table.yml'
+    'dynamodb-tables/messages.yml',
+    'dynamodb-tables/connections.yml',
+    'dynamodb-tables/rooms.yml'
   ]
 package:
   exclude:
