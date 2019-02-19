@@ -4,10 +4,11 @@
   "description": "",
   "scripts": {
     "offline": "node -r ./config/setup-offline.js ./node_modules/.bin/sls offline",
-    "deploy": "node -r dotenv-safe/config ./node_modules/.bin/sls deploy",
+    "deploy": "yarn run generateServerlessYml && node -r dotenv-safe/config ./node_modules/.bin/sls deploy",
     "invoke-local": "node -r dotenv-safe/config ./node_modules/.bin/sls invoke local -f",
     "test": "node -r ./config/tests/test-require.js ./node_modules/.bin/jest --config ./jest.config.json",
     "createTestTables": "node -r ./config/setup-offline.js scripts/createTestTables.js",
+    "generateServerlessYml": "yimp -i config/serverless.yml/index.yml -o ./serverless.yml",
     "lint:fix": "yarn run lint --fix",
     "lint": "tslint -p ."
   },
@@ -47,6 +48,7 @@
     "ts-loader": "^5.3.3",
     "tslint": "^5.12.1",
     "tslint-immutable": "^5.2.0",
-    "webpack": "^4.29.3"
+    "webpack": "^4.29.3",
+    "yaml-import": "^0.3.1"
   }
 }

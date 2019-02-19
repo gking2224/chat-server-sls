@@ -1,0 +1,20 @@
+messagesTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: messages.v2
+    BillingMode: PAY_PER_REQUEST
+    AttributeDefinitions:
+      - AttributeName: messageId
+        AttributeType: S
+      - AttributeName: room
+        AttributeType: S
+    KeySchema:
+      - AttributeName: messageId
+        KeyType: HASH
+    GlobalSecondaryIndexes:
+      - IndexName: 'roomIdx'
+        KeySchema:
+          - AttributeName: 'room'
+            KeyType: 'HASH'
+        Projection:
+          ProjectionType: ALL

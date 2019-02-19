@@ -6,6 +6,7 @@ jspm_packages
 .serverless
 serverless.yml.bak
 serverless-spec.yml
+serverless.yml
 
 .env
 .env.test

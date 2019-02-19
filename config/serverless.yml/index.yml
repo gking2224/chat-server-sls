@@ -1,0 +1,72 @@
+service: hello-sls
+custom:
+  webpack:
+    config: ./webpack.config.js
+  tables:
+    messages: ${env:MESSAGES_TABLE, 'messages.v2'}
+    connections: ${env:CONNECTIONS_TABLE, 'connections'}
+    rooms: ${env:ROOMS_TABLE, 'rooms'}
+  config:
+    dynamo_db_endpoint: ${env:DYNAMO_DB_ENDPOINT, ''}
+    ws_api_gateway_id: ${env:WS_API_GATEWAY_ID}
+    ws_logger_api_gateway_id: ${env:WS_LOGGER_API_GATEWAY_ID}
+  serverless-offline:
+    port: 4000
+
+plugins:
+  - serverless-webpack
+  - serverless-pseudo-parameters
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+  stage: dev
+  region: eu-west-1
+  iamRoleStatements: !!import/single ./iam-roles.yml
+  environment:
+    MESSAGES_TABLE: ${self:custom.tables.messages}
+    CONNECTIONS_TABLE: ${self:custom.tables.connections}
+    ROOMS_TABLE: ${self:custom.tables.rooms}
+    DYNAMO_DB_ENDPOINT: ${self:custom.config.dynamo_db_endpoint}
+    CORS_ORIGINS: ${env:CORS_ORIGINS}
+  tags:
+    Client: Animando
+    Application: ChatServer
+
+functions:
+  websocket:
+    handler: src/functions/websocket.handler
+    layers:
+      - ${env:NODE_JS_LAYER_ARN}
+  logger:
+    handler: src/functions/logger.handler
+    layers:
+      - ${env:NODE_JS_LAYER_ARN}
+  get-rooms:
+    handler: src/functions/get-rooms.handler
+    events:
+      - http:
+          path: /get-rooms
+          method: GET
+          cors:
+            origin: ${env:CORS_ORIGINS}
+  create-room:
+    handler: src/functions/create-room.handler
+    events:
+      - http:
+          path: /create-room
+          method: POST
+          cors: true
+
+resources:
+  Resources: !!import/merge [
+    './messages-table.yml',
+    './connections-table.yml',
+    './rooms-table.yml'
+  ]
+package:
+  exclude:
+    - node_modules/**
+    - '!node_modules/uuid/**'
