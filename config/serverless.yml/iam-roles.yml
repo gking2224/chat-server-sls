@@ -33,13 +33,13 @@
   Resource: "*"
 - Effect: Allow
   Action: execute-api:ManageConnections
-  Resource: arn:aws:execute-api:#{AWS::Region}:#{AWS::AccountId}:${self:custom.config.ws_api_gateway_id}/dev/POST/@connections/*
-- Effect: Allow
-  Action: execute-api:ManageConnections
-  Resource: arn:aws:execute-api:#{AWS::Region}:#{AWS::AccountId}:${self:custom.config.ws_logger_api_gateway_id}/dev/POST/@connections/*
+  Resource:
+    'Fn::Sub':
+      - arn:aws:execute-api:#{AWS::Region}:#{AWS::AccountId}:#{chatapi}/${opt:stage}/POST/@connections/*
+      - chatapi: {'Ref': 'ChatWebsocketApi'}
 - Effect: Allow
   Action: execute-api:ManageConnections
   Resource:
     'Fn::Sub':
-      - arn:aws:execute-api:#{AWS::Region}:#{AWS::AccountId}:#{apigateway}/${opt:stage}/POST/@connections/*
-      - apigateway: {'Ref': 'ChatWebsocketApi'}
+      - arn:aws:execute-api:#{AWS::Region}:#{AWS::AccountId}:#{loggerapi}/${opt:stage}/POST/@connections/*
+      - loggerapi: {'Ref': 'LoggerWebsocketApi'}

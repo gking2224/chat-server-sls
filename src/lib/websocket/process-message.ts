@@ -15,6 +15,7 @@ const sendAllRoomMessages = async (
 const sendMessageToRoom = async (agma: ApiGatewayManagementApi, message: ChatRoomMessageEntity) => {
   const connectionIds = await getConnectionsByRoom(message.room)
     .then((cc) => cc.map((c) => c.connectionId));
+  console.log(`Publishing message to connectionIds: ${connectionIds}`);
   await publishMessage(agma, connectionIds, { action: 'message', message });
 };
 
@@ -27,6 +28,7 @@ const onInitialiseConnection = async (
 
 const onMessageReceived = async (agma: ApiGatewayManagementApi, message: PublishNewMessage) => {
   const saved = await saveMessage(message);
+  console.log(`Saved message ${saved}`);
   await sendMessageToRoom(agma, saved);
 };
 
