@@ -4,7 +4,9 @@
   "description": "",
   "scripts": {
     "offline": "node -r ./config/setup-offline.js ./node_modules/.bin/sls offline",
+    "deploy:dev": "yarn run deploy --stage=dev",
     "deploy": "yarn run generateServerlessYml && node -r dotenv-safe/config ./node_modules/.bin/sls deploy",
+    "remove": "yarn run generateServerlessYml && node -r dotenv-safe/config ./node_modules/.bin/sls remove",
     "invoke-local": "node -r dotenv-safe/config ./node_modules/.bin/sls invoke local -f",
     "test": "node -r ./config/tests/test-require.js ./node_modules/.bin/jest --config ./jest.config.json",
     "createTestTables": "node -r ./config/setup-offline.js scripts/createTestTables.js",
@@ -40,6 +42,7 @@
     "eslint-plugin-import": "^2.16.0",
     "jest": "<23",
     "serverless": "^1.37.1",
+    "serverless-cf-vars": "^0.3.1",
     "serverless-offline": "^4.4.2",
     "serverless-plugin-typescript": "^1.1.5",
     "serverless-plugin-webpack": "^1.5.1",

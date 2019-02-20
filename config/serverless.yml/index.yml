@@ -3,9 +3,9 @@ custom:
   webpack:
     config: ./webpack.config.js
   tables:
-    messages: ${env:MESSAGES_TABLE, 'messages.v2'}
-    connections: ${env:CONNECTIONS_TABLE, 'connections'}
-    rooms: ${env:ROOMS_TABLE, 'rooms'}
+    messages: ${env:MESSAGES_TABLE, 'messages.v2'}_${opt:stage}
+    connections: ${env:CONNECTIONS_TABLE, 'connections'}_${opt:stage}
+    rooms: ${env:ROOMS_TABLE, 'rooms'}_${opt:stage}
   config:
     dynamo_db_endpoint: ${env:DYNAMO_DB_ENDPOINT, ''}
     ws_api_gateway_id: ${env:WS_API_GATEWAY_ID}
@@ -14,6 +14,7 @@ custom:
     port: 4000
 
 plugins:
+  - serverless-cf-vars
   - serverless-webpack
   - serverless-pseudo-parameters
   - serverless-offline
@@ -60,13 +61,9 @@ functions:
           method: POST
           cors: true
 
-resources:
-  Resources: !!import/merge [
-    'dynamodb-tables/messages.yml',
-    'dynamodb-tables/connections.yml',
-    'dynamodb-tables/rooms.yml'
-  ]
+resources: !!import/single ./resources/index.yml
 package:
   exclude:
     - node_modules/**
     - '!node_modules/uuid/**'
+

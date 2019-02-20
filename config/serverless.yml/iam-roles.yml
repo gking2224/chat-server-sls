@@ -37,3 +37,9 @@
 - Effect: Allow
   Action: execute-api:ManageConnections
   Resource: arn:aws:execute-api:#{AWS::Region}:#{AWS::AccountId}:${self:custom.config.ws_logger_api_gateway_id}/dev/POST/@connections/*
+- Effect: Allow
+  Action: execute-api:ManageConnections
+  Resource:
+    'Fn::Sub':
+      - arn:aws:execute-api:#{AWS::Region}:#{AWS::AccountId}:#{apigateway}/${opt:stage}/POST/@connections/*
+      - apigateway: {'Ref': 'ChatWebsocketApi'}
