@@ -1,0 +1,6 @@
+WebsocketApiRoleArn:
+  Description: The ARN for the Chat Websocket Role
+  Value:
+    'Fn::GetAtt': ['WebsocketApiRole', 'Arn']
+  Export:
+    Name: ${self:service}:${opt:stage}:WebsocketApiRoleArn

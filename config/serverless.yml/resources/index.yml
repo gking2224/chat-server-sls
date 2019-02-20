@@ -1,0 +1,10 @@
+  Resources: !!import/merge [
+    'dynamodb-tables/index.yml',
+    'api-gateway/index.yml',
+    'iam/index.yml'
+  ]
+  Outputs: !!import/merge [
+    'dynamodb-tables/outputs.yml',
+    'api-gateway/outputs.yml',
+    'iam/outputs.yml'
+  ]

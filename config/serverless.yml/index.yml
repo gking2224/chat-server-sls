@@ -3,7 +3,7 @@ custom:
   webpack:
     config: ./webpack.config.js
   tables:
-    messages: ${env:MESSAGES_TABLE, 'messages.v2'}_${opt:stage}
+    messages: ${env:MESSAGES_TABLE, 'messages'}_${opt:stage}
     connections: ${env:CONNECTIONS_TABLE, 'connections'}_${opt:stage}
     rooms: ${env:ROOMS_TABLE, 'rooms'}_${opt:stage}
   config:

@@ -1,0 +1,5 @@
+!!import/merge [
+    './messages.yml',
+    './connections.yml',
+    './rooms.yml'
+]

@@ -1,0 +1,85 @@
+ChatWebsocketApi:
+  Type: "AWS::ApiGatewayV2::Api"
+  Properties:
+    Description: Websocket for 2-way communication of ChatRoom messages
+    Name: ChatWebsocketApi
+    ProtocolType: WEBSOCKET
+    RouteSelectionExpression: '$request.body.action'
+
+ChatWebsocketConnectRoute:
+  Type: "AWS::ApiGatewayV2::Route"
+  Properties:
+    ApiId:
+      Ref: ChatWebsocketApi
+    RouteKey: '$connect'
+    AuthorizationType: NONE
+    OperationName: ConnectRoute
+    Target:
+      'Fn::Join':
+        - '/'
+        - - integrations
+          - Ref: ChatWebsocketIntegration
+
+ChatWebsocketDisconnectRoute:
+  Type: "AWS::ApiGatewayV2::Route"
+  Properties:
+    ApiId:
+      Ref: ChatWebsocketApi
+    RouteKey: '$disconnect'
+    AuthorizationType: NONE
+    OperationName: DisconnectRoute
+    Target:
+      'Fn::Join':
+        - '/'
+        - - integrations
+          - Ref: ChatWebsocketIntegration
+
+ChatWebsocketDefaultRoute:
+  Type: "AWS::ApiGatewayV2::Route"
+  Properties:
+    ApiId:
+      Ref: ChatWebsocketApi
+    RouteKey: '$default'
+    AuthorizationType: NONE
+    OperationName: DefaultRoute
+    Target:
+      'Fn::Join':
+        - '/'
+        - - integrations
+          - Ref: ChatWebsocketIntegration
+
+ChatWebsocketIntegration:
+  Type: "AWS::ApiGatewayV2::Integration"
+  DependsOn:
+  - WebsocketApiRole
+  Properties:
+    ApiId:
+      Ref: ChatWebsocketApi
+    Description: Integrates the Chat Websocket to the websocket SLS function
+    CredentialsArn:
+      'Fn::GetAtt': ['WebsocketApiRole', 'Arn']
+    IntegrationType: AWS_PROXY
+    IntegrationUri:
+      'Fn::Sub':
+        - arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/#{lambda}/invocations
+        - lambda: {'Fn::GetAtt': ['WebsocketLambdaFunction', 'Arn']}
+
+ChatWebsocketDeployment:
+  Type: AWS::ApiGatewayV2::Deployment
+  DependsOn:
+  - ChatWebsocketConnectRoute
+  - ChatWebsocketDisconnectRoute
+  - ChatWebsocketDefaultRoute
+  Properties:
+    ApiId:
+      Ref: ChatWebsocketApi
+
+ChatWebsocketStage:
+  Type: AWS::ApiGatewayV2::Stage
+  Properties:
+    StageName: ${opt:stage}
+    Description: Stage ${opt:stage}
+    DeploymentId:
+      Ref: ChatWebsocketDeployment
+    ApiId:
+      Ref: ChatWebsocketApi

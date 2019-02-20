@@ -1,0 +1,4 @@
+!!import/merge [
+    './chat-websocket.yml',
+    './logger-websocket.yml'
+]

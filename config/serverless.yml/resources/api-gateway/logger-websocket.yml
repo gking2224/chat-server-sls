@@ -1,0 +1,85 @@
+LoggerWebsocketApi:
+  Type: "AWS::ApiGatewayV2::Api"
+  Properties:
+    Description: Websocket for posting log messages for aggregation
+    Name: LoggerWebsocketApi
+    ProtocolType: WEBSOCKET
+    RouteSelectionExpression: '$request.body.action'
+
+LoggerWebsocketConnectRoute:
+  Type: "AWS::ApiGatewayV2::Route"
+  Properties:
+    ApiId:
+      Ref: LoggerWebsocketApi
+    RouteKey: '$connect'
+    AuthorizationType: NONE
+    OperationName: ConnectRoute
+    Target:
+      'Fn::Join':
+        - '/'
+        - - integrations
+          - Ref: LoggerWebsocketIntegration
+
+LoggerWebsocketDisconnectRoute:
+  Type: "AWS::ApiGatewayV2::Route"
+  Properties:
+    ApiId:
+      Ref: LoggerWebsocketApi
+    RouteKey: '$disconnect'
+    AuthorizationType: NONE
+    OperationName: DisconnectRoute
+    Target:
+      'Fn::Join':
+        - '/'
+        - - integrations
+          - Ref: LoggerWebsocketIntegration
+
+LoggerWebsocketDefaultRoute:
+  Type: "AWS::ApiGatewayV2::Route"
+  Properties:
+    ApiId:
+      Ref: LoggerWebsocketApi
+    RouteKey: '$default'
+    AuthorizationType: NONE
+    OperationName: DefaultRoute
+    Target:
+      'Fn::Join':
+        - '/'
+        - - integrations
+          - Ref: LoggerWebsocketIntegration
+
+LoggerWebsocketIntegration:
+  Type: "AWS::ApiGatewayV2::Integration"
+  DependsOn:
+  - WebsocketApiRole
+  Properties:
+    ApiId:
+      Ref: LoggerWebsocketApi
+    Description: Integrates the Logger Websocket to the websocket SLS function
+    CredentialsArn:
+      'Fn::GetAtt': ['LoggerWebsocketApiRole', 'Arn']
+    IntegrationType: AWS_PROXY
+    IntegrationUri:
+      'Fn::Sub':
+        - arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/#{lambda}/invocations
+        - lambda: {'Fn::GetAtt': ['LoggerLambdaFunction', 'Arn']}
+
+LoggerWebsocketDeployment:
+  Type: AWS::ApiGatewayV2::Deployment
+  DependsOn:
+  - LoggerWebsocketConnectRoute
+  - LoggerWebsocketDisconnectRoute
+  - LoggerWebsocketDefaultRoute
+  Properties:
+    ApiId:
+      Ref: LoggerWebsocketApi
+
+LoggerWebsocketStage:
+  Type: AWS::ApiGatewayV2::Stage
+  Properties:
+    StageName: ${opt:stage}
+    Description: Stage ${opt:stage}
+    DeploymentId:
+      Ref: LoggerWebsocketDeployment
+    ApiId:
+      Ref: LoggerWebsocketApi

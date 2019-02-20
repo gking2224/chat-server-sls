@@ -1,0 +1,13 @@
+ChatWebsocketApiArn:
+  Description: The ARN for the Chat Websocket Table
+  Value:
+    Ref: ChatWebsocketApi
+  Export:
+    Name: ${self:service}:${opt:stage}:ChatWebsocketApiArn
+
+LoggerWebsocketApiArn:
+  Description: The ARN for the Logger Websocket Table
+  Value:
+    Ref: LoggerWebsocketApi
+  Export:
+    Name: ${self:service}:${opt:stage}:LoggerWebsocketApiArn

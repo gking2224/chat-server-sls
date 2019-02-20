@@ -1,0 +1,6 @@
+RoomTableArn:
+  Description: The ARN for the Room Table
+  Value:
+    Fn::GetAtt: [ roomsTable, Arn ]
+  Export:
+    Name: ${self:service}:${opt:stage}:RoomTableArn

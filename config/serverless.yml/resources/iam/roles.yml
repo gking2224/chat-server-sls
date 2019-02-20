@@ -1,0 +1,81 @@
+WebsocketApiRole:
+  Type: "AWS::IAM::Role"
+  Properties:
+    RoleName: WebsocketApiRole-${self:service}-${opt:stage}
+    AssumeRolePolicyDocument:
+      Version: "2012-10-17"
+      Statement:
+        -
+          Effect: "Allow"
+          Principal:
+            Service:
+              - "apigateway.amazonaws.com"
+              - "lambda.amazonaws.com"
+          Action:
+            - "sts:AssumeRole"
+    Path: "/"
+
+WebsocketApiExecuteLambdaPolicy:
+  Type: AWS::IAM::Policy
+  Properties:
+    PolicyDocument:
+      Version: "2012-10-17"
+      Statement:
+        - Effect: Allow
+          Action: lambda:InvokeFunction
+          Resource:
+            'Fn::GetAtt': ['WebsocketLambdaFunction', 'Arn']
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:DescribeLogGroups
+            - logs:DescribeLogStreams
+            - logs:PutLogEvents
+            - logs:GetLogEvents
+            - logs:FilterLogEvents
+          Resource: "*"
+    PolicyName: ChatWebsocketApiPolicy
+    Roles:
+      - Ref: WebsocketApiRole
+
+LoggerWebsocketApiRole:
+  Type: "AWS::IAM::Role"
+  Properties:
+    RoleName: LoggerWebsocketApiRole-${self:service}-${opt:stage}
+    AssumeRolePolicyDocument:
+      Version: "2012-10-17"
+      Statement:
+        -
+          Effect: "Allow"
+          Principal:
+            Service:
+              - "apigateway.amazonaws.com"
+              - "lambda.amazonaws.com"
+          Action:
+            - "sts:AssumeRole"
+    Path: "/"
+
+LoggerWebsocketApiExecuteLambdaPolicy:
+  Type: AWS::IAM::Policy
+  Properties:
+    PolicyDocument:
+      Version: "2012-10-17"
+      Statement:
+        - Effect: Allow
+          Action: lambda:InvokeFunction
+          Resource:
+            'Fn::GetAtt': ['LoggerLambdaFunction', 'Arn']
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:DescribeLogGroups
+            - logs:DescribeLogStreams
+            - logs:PutLogEvents
+            - logs:GetLogEvents
+            - logs:FilterLogEvents
+          Resource: "*"
+    PolicyName: LoggerWebsocketApiPolicy
+    Roles:
+      - Ref: LoggerWebsocketApiRole
